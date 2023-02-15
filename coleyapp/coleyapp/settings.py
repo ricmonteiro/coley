@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!mk*7j358b#=q!@rat^x()3%kl8i(d*)nv#k*)*xm89e&^uy65'
+SECRET_KEY = 'django-insecure-xv^lhb&&z7de)t@k=h9py*$so%w@&x2^=8b=kk7iabv&n!&yjv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,9 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.postgres',
-    'rest_framework',
-    'coleyapi',
 ]
 
 MIDDLEWARE = [
@@ -78,12 +75,8 @@ WSGI_APPLICATION = 'coleyapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'coley_db',
-        'USER': 'postgres',
-        'PASSWORD': 'Ric1991!',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -128,5 +121,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AUTH_USER_MODEL = 'coleyapi.Users'
