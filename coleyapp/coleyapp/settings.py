@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xv^lhb&&z7de)t@k=h9py*$so%w@&x2^=8b=kk7iabv&n!&yjv'
+SECRET_KEY = 'django-insecure-cug__c87tma#6e*fjy&elcuayt@ldc7$g$874t+mjocih&q3!_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'coleyapi',
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -80,10 +78,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'coleydb',
-        'USER': 'postgres',
-        'PASSWORD': 'Ric1991!',
-        'HOST': 'localhost',
+        'HOST':'localhost',
         'PORT':'5432',
+        'USER':'postgres',
+        'PASSWORD':'Ric1991!'
+
     }
 }
 
@@ -128,8 +127,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AUTH_USER_MODEL = 'coleyapi.User'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
-MEDIA_URL = '/uploads/'

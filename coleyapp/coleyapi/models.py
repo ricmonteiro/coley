@@ -1,41 +1,154 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser,UserManager
-
 from django.utils import timezone
+
 # Create your models here.
 
 class Analysis(models.Model):
-    id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey('User', models.DO_NOTHING)
-    cut = models.ForeignKey('Cut', models.DO_NOTHING, null=True)
+    user = models.ForeignKey('AuthUser', models.DO_NOTHING)
+    cut = models.ForeignKey('Cut', models.DO_NOTHING)
     date = models.DateTimeField()
-    result_xlsx_path = models.FileField(upload_to='uploads/')
-    state = models.JSONField()  # This field type is a guess.
+    result_xlsx_path = models.CharField(max_length=255, blank=True, null=True)
+    state = models.JSONField() 
 
     class Meta:
-        managed = True
-        
+        managed = False
+        db_table = 'analysis'
+
+
+class AuthGroup(models.Model):
+    name = models.CharField(unique=True, max_length=150)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_group'
+
+
+class AuthGroupPermissions(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
+    permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_group_permissions'
+        unique_together = (('group', 'permission'),)
+
+
+class AuthPermission(models.Model):
+    name = models.CharField(max_length=255)
+    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING)
+    codename = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_permission'
+        unique_together = (('content_type', 'codename'),)
+
+
+class AuthUser(models.Model):
+    password = models.CharField(max_length=128)
+    last_login = models.DateTimeField(blank=True, null=True)
+    is_superuser = models.BooleanField(default=False)
+    username = models.CharField(unique=True, max_length=150)
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    email = models.CharField(unique=True, max_length=254)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user'
+
+
+class AuthUserGroups(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user_groups'
+        unique_together = (('user', 'group'),)
+
+
+class AuthUserUserPermissions(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+    permission = models.ForeignKey(AuthPermission, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user_user_permissions'
+        unique_together = (('user', 'permission'),)
 
 
 class Containers(models.Model):
     container_name = models.CharField(max_length=255)
-    container_description = models.JSONField()  # This field type is a guess.
+    container_description = models.JSONField()
 
     class Meta:
-        managed = True
-        
+        managed = False
+        db_table = 'containers'
 
 
 class Cut(models.Model):
     parent_cut = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)
-    cut_number = models.IntegerField(null=True)
-    user_id = models.ForeignKey('User', models.DO_NOTHING)
+    cut_number = models.IntegerField()
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
     purpose = models.CharField(max_length=255)
     cut_date = models.DateTimeField()
 
     class Meta:
-        managed = True
-        
+        managed = False
+        db_table = 'cut'
+
+
+class DjangoAdminLog(models.Model):
+    action_time = models.DateTimeField()
+    object_id = models.TextField(blank=True, null=True)
+    object_repr = models.CharField(max_length=200)
+    action_flag = models.SmallIntegerField()
+    change_message = models.TextField()
+    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'django_admin_log'
+
+
+class DjangoContentType(models.Model):
+    app_label = models.CharField(max_length=100)
+    model = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'django_content_type'
+        unique_together = (('app_label', 'model'),)
+
+
+class DjangoMigrations(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    app = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    applied = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'django_migrations'
+
+
+class DjangoSession(models.Model):
+    session_key = models.CharField(primary_key=True, max_length=40)
+    session_data = models.TextField()
+    expire_date = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'django_session'
+
 
 class Patients(models.Model):
     patient_name = models.CharField(max_length=255)
@@ -43,56 +156,38 @@ class Patients(models.Model):
     gender = models.CharField(max_length=255)
 
     class Meta:
-        managed = True
-       
+        managed = False
+        db_table = 'patients'
 
 
 class Sample(models.Model):
-    user_id = models.ForeignKey('User', models.DO_NOTHING)
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
     origin = models.CharField(max_length=255)
     patient = models.ForeignKey(Patients, models.DO_NOTHING)
-    tumor_type = models.ForeignKey('TumorType', models.DO_NOTHING)
-    entry_date = models.DateTimeField(default=timezone.now)
+    tumor_type = models.ForeignKey('Tumortype', models.DO_NOTHING)
+    entry_date = models.DateTimeField()
     temperature = models.ForeignKey('Temperature', models.DO_NOTHING)
-    container = models.ForeignKey('Containers', models.DO_NOTHING)
-    location = models.JSONField()  # This field type is a guess.
+    container = models.ForeignKey(Containers, models.DO_NOTHING)
+    location = models.JSONField() 
     cut = models.ForeignKey('Cut', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
-        managed = True
-      
+        managed = False
+        db_table = 'sample'
 
 
 class Temperature(models.Model):
     temperature_desc = models.CharField(max_length=255)
 
     class Meta:
-        managed = True
-        
+        managed = False
+        db_table = 'temperature'
 
 
-class TumorType(models.Model):
+class Tumortype(models.Model):
+    id = models.SmallAutoField(primary_key=True)
     tumor_description = models.CharField(max_length=255)
 
     class Meta:
-        managed = True
-        
-
-
-class User(AbstractUser):
-    username = models.CharField(max_length=255, unique=True, null=False)
-    first_name = models.CharField(max_length=255, blank=True, null=True)
-    last_name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.EmailField(max_length=255)
-    password = models.CharField(max_length=255)
-    groups = models.IntegerField(blank=True, null=True)
-    user_permissions = models.IntegerField(blank=True, null=True)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=False)
-    last_login = models.DateTimeField(blank=True, null=True)
-    date_joined = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        managed = True
-               
+        managed = False
+        db_table = 'tumortype'
