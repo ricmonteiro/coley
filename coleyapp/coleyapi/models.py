@@ -53,7 +53,7 @@ class AuthUser(models.Model):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     email = models.CharField(unique=True, max_length=254)
-    is_staff = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False, unique=True)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
 
@@ -83,7 +83,6 @@ class AuthUserUserPermissions(models.Model):
         db_table = 'auth_user_user_permissions'
         unique_together = (('user', 'permission'),)
 
-
 class Containers(models.Model):
     container_name = models.CharField(max_length=255)
     container_description = models.JSONField()
@@ -91,7 +90,6 @@ class Containers(models.Model):
     class Meta:
         managed = False
         db_table = 'containers'
-
 
 class Cut(models.Model):
     parent_cut = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)
@@ -103,7 +101,6 @@ class Cut(models.Model):
     class Meta:
         managed = False
         db_table = 'cut'
-
 
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
@@ -117,7 +114,6 @@ class DjangoAdminLog(models.Model):
     class Meta:
         managed = False
         db_table = 'django_admin_log'
-
 
 class DjangoContentType(models.Model):
     app_label = models.CharField(max_length=100)
