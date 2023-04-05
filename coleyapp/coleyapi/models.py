@@ -165,6 +165,7 @@ class Sample(models.Model):
     origin = models.CharField(max_length=255)
     patient = models.ForeignKey(Patients, models.DO_NOTHING)
     tumor_type = models.ForeignKey('Tumortype', models.DO_NOTHING)
+    tissue_type = models.ForeignKey('Tissuetype', models.DO_NOTHING)
     entry_date = models.DateTimeField()
     temperature = models.ForeignKey('Temperature', models.DO_NOTHING)
     container = models.ForeignKey(Containers, models.DO_NOTHING)
@@ -174,6 +175,14 @@ class Sample(models.Model):
     class Meta:
         managed = False
         db_table = 'sample'
+
+class Tissuetype(models.Model):
+    id = models.SmallAutoField(primary_key=True)
+    tissue_description = models.CharField(max_length=255)
+
+    class Meta:
+        managed = True
+        db_table = 'tissuetype'
 
 
 class Temperature(models.Model):
