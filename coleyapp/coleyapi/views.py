@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.db import connection
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
 import json, operator
 
 # connect to db
@@ -26,6 +28,33 @@ REGISTER_NEW_USER = "CALL create_new_user(%s, %s, %s, %s, %s, %s)"
 
 
 # Create your views here.
+@csrf_exempt
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return JsonResponse({'success': True})
+           
+        else:
+            return JsonResponse({'success': False, 'error': 'Invalid username or password'})
+    else:
+        return JsonResponse({'success': False, 'error': 'Method not allowed'})
+    
+
+def logout_view(request):
+    logout(request)
+    return JsonResponse({'success': True})
+
+
+def create_user_view(request):
+    return True
+
+'''
 def user(request):
     id = 10
     cursor.execute(AUTHENTICATED_USER % id)
@@ -47,4 +76,4 @@ def user_list(request):
 def tissue_types(request):
     cursor.execute(TISSUES_AVAILABLE)
     data = cursor.fetchall()
-    return JsonResponse(data, safe=False)
+    return JsonResponse(data, safe=False)'''
