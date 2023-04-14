@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 import json, operator
+import time
 
 # connect to db
 cursor = connection.cursor()
@@ -30,37 +31,56 @@ REGISTER_NEW_USER = "CALL create_new_user(%s, %s, %s, %s, %s, %s)"
 
 
 # Create your views here.
+
+
+# Login view
 @csrf_exempt
 def login_view(request):
+
     if request.method == 'POST':
         username = request.POST.get("username")
         password = request.POST.get("password")
         
 
         user = authenticate(request, username=username, password=password)
-        
+
         if user is not None:
             login(request, user)
-            print(request.user.is_authenticated)
+            global is_logged
+            global session
+            global authenticated_user
+            
+            is_logged = True 
+            session = request.session
+            cursor.execute(AUTHENTICATED_USER % int(session.get('_auth_user_id')))
+            authenticated_user = cursor.fetchall()
 
             return JsonResponse({'success': True, 'username':username})
            
         else:
+            is_logged = False
             return JsonResponse({'success': False, 'error': 'Invalid username or password'})
+            
     else:
+        is_logged = False
         return JsonResponse({'success': False, 'error': 'Method not allowed'})
-    
+
+# Role selection view    
 def user_roles(request):
-    print(request.user.is_authenticated)
-    return JsonResponse([1,2,3], safe=False)
-        
-
+    if request.method == 'GET':
+        try:
+            cursor.execute(USER_AVAILABLE_ROLES % int(session.get('_auth_user_id')))
+            data = cursor.fetchone()
+            if data is not None:
+                return JsonResponse(data, safe=False)
+            else: 
+                return JsonResponse([{'success': False, 'error': 'There was a problem obtaining your roles'}], safe=False)
+        except:
+            return JsonResponse([{'success': False, 'error': 'Could not establish connection to the database'}], safe=False)
     
-
 def logout_view(request):
     logout(request)
     return JsonResponse({'success': True})
-
 
 def create_user_view(request):
     if request.method == 'POST':
@@ -68,11 +88,6 @@ def create_user_view(request):
         return JsonResponse({'success':True, 'message': 'User created succesfully'})
     else:
         return JsonResponse({'register user page':True})
-
-
-
-
-
 
 
 '''

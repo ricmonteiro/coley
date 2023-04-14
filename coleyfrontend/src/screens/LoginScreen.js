@@ -22,8 +22,10 @@ function Login() {
         }})
       .then((response) => {
         if (response.data.success) {
-          console.log("Logged in successfully");
+          localStorage.setItem('token', response.data.token);
           console.log(response.data)
+          //console.log("Logged in successfully");
+          //console.log(response.data)
           navigate('/select_role');
         } else {
           setError(response.data.error);
@@ -33,6 +35,7 @@ function Login() {
         console.log(error);
       });
   };
+
 
   return (
     <div className="login-form">

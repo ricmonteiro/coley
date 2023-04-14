@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-cug__c87tma#6e*fjy&elcuayt@ldc7$g$874t+mjocih&q3!_
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000/api/login']
 
 
 # Application definition
@@ -140,3 +140,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'

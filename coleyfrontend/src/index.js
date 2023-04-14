@@ -10,17 +10,11 @@ import axios from 'axios'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 axios.defaults.baseURL = 'http://localhost:8000/api';
 root.render(
-  <React.StrictMode>
-
-
-    <Router>
+     <Router>
 
     <App />
 
     </Router>
-
-
-</React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
