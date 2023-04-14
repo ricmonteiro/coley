@@ -3,12 +3,24 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import axios from 'axios'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+axios.defaults.baseURL = 'http://localhost:8000/api';
 root.render(
   <React.StrictMode>
+
+
+    <Router>
+
     <App />
-  </React.StrictMode>
+
+    </Router>
+
+
+</React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

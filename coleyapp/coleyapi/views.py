@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db import connection
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 import json, operator
 
@@ -33,17 +35,26 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get("username")
         password = request.POST.get("password")
+        
 
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
             login(request, user)
-            return JsonResponse({'success': True})
+            print(request.user.is_authenticated)
+
+            return JsonResponse({'success': True, 'username':username})
            
         else:
             return JsonResponse({'success': False, 'error': 'Invalid username or password'})
     else:
         return JsonResponse({'success': False, 'error': 'Method not allowed'})
+    
+def user_roles(request):
+    print(request.user.is_authenticated)
+    return JsonResponse([1,2,3], safe=False)
+        
+
     
 
 def logout_view(request):
@@ -52,7 +63,17 @@ def logout_view(request):
 
 
 def create_user_view(request):
-    return True
+    if request.method == 'POST':
+        cursor.execute(REGISTER_NEW_USER % id)
+        return JsonResponse({'success':True, 'message': 'User created succesfully'})
+    else:
+        return JsonResponse({'register user page':True})
+
+
+
+
+
+
 
 '''
 def user(request):

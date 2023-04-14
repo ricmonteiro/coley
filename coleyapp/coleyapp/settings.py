@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +27,7 @@ SECRET_KEY = 'django-insecure-cug__c87tma#6e*fjy&elcuayt@ldc7$g$874t+mjocih&q3!_
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 
 # Application definition
@@ -63,7 +65,9 @@ ROOT_URLCONF = 'coleyapp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, '')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -93,9 +97,6 @@ DATABASES = {
 
     }
 }
-
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_NAME = 'sessionid'
 
 
 
