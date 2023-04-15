@@ -65,6 +65,7 @@ def login_view(request):
         is_logged = False
         return JsonResponse({'success': False, 'error': 'Method not allowed'})
 
+
 # Role selection view    
 def user_roles(request):
     if request.method == 'GET':
@@ -77,17 +78,28 @@ def user_roles(request):
                 return JsonResponse([{'success': False, 'error': 'There was a problem obtaining your roles'}], safe=False)
         except:
             return JsonResponse([{'success': False, 'error': 'Could not establish connection to the database'}], safe=False)
-    
+
+@csrf_exempt    
 def logout_view(request):
-    logout(request)
-    return JsonResponse({'success': True})
+    if request.method == 'POST':
+        logout(request)
+        is_logged = None
+        session = None
+        authenticated_user = None
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False, 'message': 'Logout failed'})
 
 def create_user_view(request):
+    if request.method == 'GET':
+        print(authenticated_user)
+        return JsonResponse(authenticated_user, safe=False)
     if request.method == 'POST':
         cursor.execute(REGISTER_NEW_USER % id)
-        return JsonResponse({'success':True, 'message': 'User created succesfully'})
+        return JsonResponse({'success' : True, 'message' : 'User created succesfully'})
     else:
-        return JsonResponse({'register user page':True})
+        return JsonResponse({'sucess' : False, 'message' : 'There was a problem'})
+
 
 
 '''

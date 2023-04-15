@@ -8,8 +8,6 @@ function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-
-
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
@@ -23,9 +21,6 @@ function Login() {
       .then((response) => {
         if (response.data.success) {
           localStorage.setItem('token', response.data.token);
-          console.log(response.data)
-          //console.log("Logged in successfully");
-          //console.log(response.data)
           navigate('/select_role');
         } else {
           setError(response.data.error);
