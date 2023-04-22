@@ -6,6 +6,7 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  //const [isLogged, setIsLogged] = useState("")
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -20,14 +21,16 @@ function Login() {
         }})
       .then((response) => {
         if (response.data.success) {
-          localStorage.setItem('token', response.data.token);
-          navigate('/select_role');
+          //setIsLogged(response.data.success)
+          console.log(response.data.success)
+          const isLogged = response.data.success
+          navigate('/select_role', {state: { isLogged }});
         } else {
           setError(response.data.error);
         }
       })
       .catch((error) => {
-        console.log(error);
+        setError(error.message);
       });
   };
 

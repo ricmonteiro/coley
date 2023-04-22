@@ -9,10 +9,18 @@ function MainDashboard() {
   const [error, setError] = useState("");
   const location = useLocation();
   const selectedRole = location.state && location.state.selectedRole;
+  const isLogged = location.state && location.state.isLogged
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    axios.post('/logout/')
+  useEffect(() => {
+    if(!isLogged){
+      navigate('/')}}, []);
+
+  const handleLogout = () => { 
+    axios.post('/logout/', {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }})
     .then((response) => {
       if (response.data.success) {
         navigate('/');
@@ -20,16 +28,21 @@ function MainDashboard() {
         setError(response.data.error);
       }
     })
+    
   }
 
-
+  const handleCreateNewUser = () => {
+    navigate('/register_new_user');
+  
+    }
 
   return (
     <div className='dash'>
       <h1>MainDashboard</h1>
-      {selectedRole && <p>Role: {selectedRole}</p>}
+      {<p>Role: {selectedRole}</p>}
+      {<p>{isLogged}</p>}
       <button className='role-selection-buttons button' style={{ backgroundColor: "black" }} onClick={handleLogout}>Logout</button>
-      {selectedRole == 'Admin' && <button className='role-selection-buttons button' >Create new user</button>}
+      {selectedRole === 'Admin' && <button className='role-selection-buttons button' onClick={handleCreateNewUser} >Create new user</button>}
 
 
     </div>
