@@ -1,37 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react"
 
 function CreateUser() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const isLogged = location.state && location.state.isLogged;
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    axios
-      .post('/login/', {
-        username: username,
-        password: password,
-      }, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }})
-      .then((response) => {
-        if (response.data.success) {
-          localStorage.setItem('token', response.data.token);
-          navigate('/select_role');
-        } else {
-          setError(response.data.error);
-        }
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  };
-
-
+  useEffect(() => {
+    if(!isLogged){
+      navigate('/')}});
+ 
   return (
     <div>
       <h1>create new user</h1> 

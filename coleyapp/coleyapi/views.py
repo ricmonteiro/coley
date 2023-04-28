@@ -44,10 +44,12 @@ def login_view(request):
         if user is not None:
             login(request, user)
             global session
+            global authenticated_user
             session = request.session
             request.session['foo'] = 'bar'
             cursor.execute(AUTHENTICATED_USER % int(session.get('_auth_user_id')))
             authenticated_user = cursor.fetchall()
+            print(authenticated_user)
             return JsonResponse({'success': True, 'user': authenticated_user})
            
         else:

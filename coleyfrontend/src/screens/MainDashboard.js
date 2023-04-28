@@ -14,7 +14,7 @@ function MainDashboard() {
 
   useEffect(() => {
     if(!isLogged){
-      navigate('/')}}, []);
+      navigate('/')}});
 
   const handleLogout = () => { 
     axios.post('/logout/', {
@@ -32,17 +32,25 @@ function MainDashboard() {
   }
 
   const handleCreateNewUser = () => {
-    navigate('/register_new_user');
+    const isLogged = true
+    navigate('/new_user', { state: { isLogged } });
   
     }
 
+  const handleRegisterNewSample = () => {
+      const isLogged = true
+      navigate('/new_sample', { state: { isLogged } });
+    
+      }
+
   return (
     <div className='dash'>
-      <h1>MainDashboard</h1>
+      <h1>Dashboard</h1>
       {<p>Role: {selectedRole}</p>}
       {<p>{isLogged}</p>}
       <button className='role-selection-buttons button' style={{ backgroundColor: "black" }} onClick={handleLogout}>Logout</button>
-      {selectedRole === 'Admin' && <button className='role-selection-buttons button' onClick={handleCreateNewUser} >Create new user</button>}
+      {selectedRole === 'Admin' && <button className='button' onClick={handleCreateNewUser}>Create new user</button>}
+      {selectedRole !== 'Student' && <button className='button' onClick={handleRegisterNewSample}>Register new sample</button>}
 
 
     </div>
