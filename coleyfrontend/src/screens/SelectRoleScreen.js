@@ -6,15 +6,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 function SelectRoles() {
   const [roles, setRoles] = useState([]);
   const [selectedRole, setSelectedRole] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false)
   const location = useLocation();
   const isLogged = location.state && location.state.isLogged;
   const navigate = useNavigate();
-
-
- 
-
 
   useEffect(() => {
     if(isLogged){
@@ -26,23 +22,26 @@ function SelectRoles() {
       console.error(error);
       setError("An error occurred while retrieving the available roles");
     });
-  }else{navigate('/')}}, []);
+  }else{navigate('/')}},[selectedRole]);
+
 
   const handleRoleSelection = (event) => {
-    setSelectedRole(event.target.value);
+      setSelectedRole(event.target.value);    
   };
 
   const handleBack = () => {
     setError(null);
+    if (isLogged){
+      navigate('/')
+    }else{
     axios.post('/logout/')
     .then((response) => {
       if (response.data.success) {
-        console.log(response)
         navigate('/');
       } else {
         setError(response.data.error);
       }
-    })
+    })}
   }
 
   const handleSubmit = (event) => {
@@ -61,10 +60,11 @@ function SelectRoles() {
   
   return (
     <div className="role-selection-container ">
+
     <div className='role-selection-form'>
-    
 
     <h2>Select Your Role</h2>
+    
       {error && <p>{error}</p>}
       {roles.map((role) => (
         <div key={role.role_id}>
@@ -75,17 +75,12 @@ function SelectRoles() {
             value={role.role}
             checked={selectedRole === role.role}
             onChange={handleRoleSelection} />
-
-          <label htmlFor={role.role}>
-          
+          <label htmlFor={role.role}>    
           {role.role}</label>
-
-        </div>
-        
+        </div>       
       ))}
-      
-      </div>
 
+      </div>
       <br />    
       <div className="role-selection-buttons">
       <button className='role-selection-buttons button' disabled={!selectedRole} onClick={handleSubmit}>Continue</button>

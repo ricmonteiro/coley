@@ -26,7 +26,7 @@ SAMPLE_LIST_FOR_USER = "SELECT * FROM sample_list_for_user(%d)"
 ## PL/pgSQL procedures
 REGISTER_NEW_SAMPLE = "CALL register_new_sample(%d, %s, %s, %d, %d, %d, %d, %s) "
 REGISTER_NEW_CUT = "CALL register_new_cut(%d, %d, %s, %d)"
-REGISTER_NEW_USER = "CALL create_new_user(%s, %s, %s, %s, %s, %s)"
+REGISTER_NEW_USER = "CALL create_new_user(%s,%s,%s,%s,%s,%s)"
 
 
 # Create your views here.
@@ -37,7 +37,8 @@ def login_view(request):
 
     if request.method == 'POST':
         username = request.POST.get("username")
-        password = request.POST.get("password")   
+        password = request.POST.get("password")
+ 
 
         user = authenticate(request, username=username, password=password)
 
@@ -83,17 +84,31 @@ def user_roles(request):
         except:
             return JsonResponse([{'success': False, 'error': 'Could not establish connection to the database'}], safe=False)
 
-
+@csrf_exempt
 def create_user_view(request):
-    if request.method == 'GET':
-        return JsonResponse({'success': True, 'message': 'User created'})
+    roles_numbers = {'admin':1, 'supervisor':2, 'technician':3, 'student':4}
 
-        
     if request.method == 'POST':
-        cursor.execute(REGISTER_NEW_USER % id)
-        return JsonResponse({'success' : True, 'message' : 'User created succesfully'})
+        username = str(json.loads(request.body.decode('utf-8'))['username'])
+        firstname = str(json.loads(request.body.decode('utf-8'))['firstname'])
+        lastname = str(json.loads(request.body.decode('utf-8'))['lastname'])
+        password = make_password(str(json.loads(request.body.decode('utf-8'))['password']))
+        email = str(json.loads(request.body.decode('utf-8'))['email'])
+        roles = json.loads(request.body.decode('utf-8'))['roles']
+        selected_roles = [role for role, selected in roles.items() if selected]
+        roles_id = [n for role, n in roles_numbers.items() if role in selected_roles]
+
+        try:
+            cursor.execute(REGISTER_NEW_USER, (username, firstname, lastname, email, password, roles_id))
+            print("User created in the DB")
+        except Exception as inst:
+            print(inst) 
+            return JsonResponse({'sucess' : False, 'message' : 'There was a problem.'})
+        
+
+        return JsonResponse({'success' : True, 'message' : 'User created succesfully!'})
     else:
-        return JsonResponse({'sucess' : False, 'message' : 'There was a problem'})
+        return JsonResponse({'sucess' : False, 'message' : 'There was a problem.'})
 
 '''
 def user(request):

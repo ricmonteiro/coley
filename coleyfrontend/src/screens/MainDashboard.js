@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react'
 
 
 function MainDashboard() {
-  const [error, setError] = useState("");
   const location = useLocation();
   const selectedRole = location.state && location.state.selectedRole;
   const isLogged = location.state && location.state.isLogged
@@ -25,7 +24,7 @@ function MainDashboard() {
       if (response.data.success) {
         navigate('/');
       } else {
-        setError(response.data.error);
+        navigate('/');;
       }
     })
     
@@ -33,13 +32,13 @@ function MainDashboard() {
 
   const handleCreateNewUser = () => {
     const isLogged = true
-    navigate('/new_user', { state: { isLogged } });
+    navigate('/new_user', { state: { isLogged, selectedRole } });
   
     }
 
   const handleRegisterNewSample = () => {
       const isLogged = true
-      navigate('/new_sample', { state: { isLogged } });
+      navigate('/new_sample', { state: { isLogged, selectedRole } });
     
       }
 
@@ -48,9 +47,9 @@ function MainDashboard() {
       <h1>Dashboard</h1>
       {<p>Role: {selectedRole}</p>}
       {<p>{isLogged}</p>}
-      <button className='role-selection-buttons button' style={{ backgroundColor: "black" }} onClick={handleLogout}>Logout</button>
       {selectedRole === 'Admin' && <button className='button' onClick={handleCreateNewUser}>Create new user</button>}
       {selectedRole !== 'Student' && <button className='button' onClick={handleRegisterNewSample}>Register new sample</button>}
+      <button className='role-selection-buttons button' style={{ backgroundColor: "black" }} onClick={handleLogout}>Logout</button>
 
 
     </div>
