@@ -14,15 +14,17 @@ function SelectRoles() {
 
   useEffect(() => {
     if(isLogged){
+    setLoading(true)
     axios.get("/user_roles/")
     .then((response) => {
-      setRoles(response.data[0]);}
+      setRoles(response.data[0]);
+      setLoading(false)}
     )
     .catch((error) => {
       console.error(error);
       setError("An error occurred while retrieving the available roles");
     });
-  }else{navigate('/')}},[selectedRole]);
+  }else{navigate('/')}}, [navigate, isLogged, selectedRole]);
 
 
   const handleRoleSelection = (event) => {
@@ -66,7 +68,7 @@ function SelectRoles() {
     <h2>Select Your Role</h2>
     
       {error && <p>{error}</p>}
-      {roles.map((role) => (
+      <ul>{roles.map((role) => (
         <div key={role.role_id}>
           <input className="role-selection-option label"
             type="radio"
@@ -78,7 +80,7 @@ function SelectRoles() {
           <label htmlFor={role.role}>    
           {role.role}</label>
         </div>       
-      ))}
+      ))}</ul>
 
       </div>
       <br />    

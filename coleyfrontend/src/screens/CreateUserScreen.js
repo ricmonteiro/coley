@@ -20,6 +20,10 @@ function CreateUser() {
     technician: false,
     student: false,
   });
+  
+  useEffect(() => {
+    if(!isLogged){
+      navigate('/')}});
 
   const handleRoleChange = (event) => {
     const { name, checked } = event.target;

@@ -47,10 +47,8 @@ def login_view(request):
             global session
             global authenticated_user
             session = request.session
-            request.session['foo'] = 'bar'
             cursor.execute(AUTHENTICATED_USER % int(session.get('_auth_user_id')))
             authenticated_user = cursor.fetchall()
-            print(authenticated_user)
             return JsonResponse({'success': True, 'user': authenticated_user})
            
         else:
@@ -75,6 +73,7 @@ def logout_view(request):
 def user_roles(request):
     if request.method == 'GET':
         try:
+            
             cursor.execute(USER_AVAILABLE_ROLES % int(session.get('_auth_user_id')))
             data = cursor.fetchone()
             if data is not None:
@@ -100,15 +99,18 @@ def create_user_view(request):
 
         try:
             cursor.execute(REGISTER_NEW_USER, (username, firstname, lastname, email, password, roles_id))
-            print("User created in the DB")
         except Exception as inst:
-            print(inst) 
-            return JsonResponse({'sucess' : False, 'message' : 'There was a problem.'})
+             return JsonResponse({'sucess' : False, 'message' : inst})
         
 
         return JsonResponse({'success' : True, 'message' : 'User created succesfully!'})
     else:
         return JsonResponse({'sucess' : False, 'message' : 'There was a problem.'})
+
+
+
+def create_sample_view(request):
+    return JsonResponse({'success': True, 'message': 'Sample created successfully'})
 
 '''
 def user(request):
