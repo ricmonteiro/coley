@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Alert, Button, Form } from "react-bootstrap";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -37,14 +38,14 @@ function Login() {
 
   return (
     <div className="login-form">
-      <h1>coley</h1> 
+      <h1 className="m-5">coley</h1> 
 
       <h3>login</h3>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username: </label>
-          <input
+      <Form className="p-2" onSubmit={handleSubmit}>
+        <div className="p-2">
+          <Form.Label htmlFor="username">Username: </Form.Label>
+          <Form.Control
             type="text"
             id="username"
             value={username}
@@ -52,9 +53,10 @@ function Login() {
             required
           />
         </div>
-        <div>
-          <label htmlFor="password">Password: </label>
-          <input
+        <div className="p-2">
+          <Form.Label htmlFor="password">Password: </Form.Label>
+          <Form.Control
+            
             type="password"
             id="password"
             value={password}
@@ -62,10 +64,11 @@ function Login() {
             required
           />
         </div>
-        <button type="submit">Login</button>
-        {error && <p>{error}</p>}
 
-      </form>
+        <Button className="m-5" type="submit">Login</Button>
+        {error && <Alert variant='danger'>{error}</Alert>}
+      </Form>
+
     </div>
   );
 }

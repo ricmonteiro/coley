@@ -1,0 +1,106 @@
+import React from 'react'
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from "axios";
+import { useEffect } from "react"
+import { Select, MenuItem } from '@mui/material';
+import { Form, Row, Col, Button, Alert } from 'react-bootstrap'
+
+
+function CreatePatient() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const selectedRole = location.state && location.state.selectedRole;
+    const isLogged = location.state && location.state.isLogged
+    const [name, setName] = useState('');
+    const [dob, setDob] = useState('');
+    const [gender, setGender] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
+    const [submitError, setSubmitError] = useState('')
+    const options = [
+        {value: null, label:"Select gender"},
+        { value: "female", label: "Female" },
+        { value: "male", label: "Male" },
+        { value: "other", label: "Other" }
+      ];
+    
+    useEffect(() => {
+      if(!isLogged){
+        navigate('/')}});
+    
+    const handleSubmit = (event) => {
+      event.preventDefault();
+  
+      const formData = {
+        name: name,
+        dob: dob,
+        gender: gender
+      };
+      
+  
+      axios.post('http://localhost:8000/api/new_patient/', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          setSuccessMessage(response.data.message)
+          console.log(response.data);
+        })
+        .catch(error => {
+          setSubmitError(error)
+          console.error('There was a problem submitting the form: ', error);
+        });
+    };
+  
+    const handleCancel = (event) => {
+      navigate('/dashboard', {state : {isLogged, selectedRole}})
+    }
+    const handleChange = (event) => {
+        setGender(event.target.value);
+        console.log(gender)
+      };
+  
+  
+    return (
+      <Form onSubmit={handleSubmit}>
+        <h2>Insert patient details</h2>
+        <Form.Label>
+          Name:
+          <Form.Control
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+          />
+        </Form.Label>
+        <Form.Label>
+          Date of birth:
+          <Form.Control
+            type="text"
+            value={dob}
+            placeholder='yyyy/mm/dd'
+            onChange={e => setDob(e.target.value)}
+          />
+
+        </Form.Label>
+
+         <Form.Label>Gender:
+          <Form.Select
+        value={gender}
+        onChange={handleChange}>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+        </Form.Select>
+        </Form.Label>
+        {successMessage && <Alert variant='success'>{successMessage}</Alert>}
+        {submitError && <Alert variant='danger'>{submitError}</Alert>}
+        <Button  className='button m-2' type="submit">Create patient</Button>
+        <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
+      </Form>
+    );
+}
+
+export default CreatePatient

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import {Row, Col, Form, Button} from 'react-bootstrap'
 
 
 function SelectRoles() {
@@ -85,8 +86,8 @@ function SelectRoles() {
       </div>
       <br />    
       <div className="role-selection-buttons">
-      <button className='role-selection-buttons button' disabled={!selectedRole} onClick={handleSubmit}>Continue</button>
-      <button className='role-selection-buttons button' style={{ backgroundColor: "black" }} onClick={handleBack}>Back</button>
+      <Button className='button m-2' disabled={!selectedRole} onClick={handleSubmit}>Continue</Button>
+      <Button className='button m-2' style={{ backgroundColor: "black" }} onClick={handleBack}>Back</Button>
       </div>
       </div>
   );

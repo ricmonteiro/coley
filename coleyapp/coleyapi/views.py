@@ -24,9 +24,12 @@ SAMPLE_INFORMATION = "SELECT * FROM sample_information(%d)"
 SAMPLE_LIST_FOR_USER = "SELECT * FROM sample_list_for_user(%d)"
 
 ## PL/pgSQL procedures
-REGISTER_NEW_SAMPLE = "CALL register_new_sample(%d, %s, %s, %d, %d, %d, %d, %s) "
+REGISTER_NEW_SAMPLE = "CALL register_new_sample(%d, %s, %s, %d, %d, %d, %d, %s)"
 REGISTER_NEW_CUT = "CALL register_new_cut(%d, %d, %s, %d)"
+
 REGISTER_NEW_USER = "CALL create_new_user(%s,%s,%s,%s,%s,%s)"
+REGISTER_NEW_PATIENT = "CALL create_new_patient(%s, %s, %s)"
+
 
 
 # Create your views here.
@@ -79,10 +82,12 @@ def user_roles(request):
             if data is not None:
                 return JsonResponse(data, safe=False)
             else: 
-                return JsonResponse([{'success': False, 'error': 'There was a problem obtaining your roles'}], safe=False)
+                return JsonResponse([{'success': False, 'error': 'There was a problem obtaining your roles.'}], safe=False)
         except:
-            return JsonResponse([{'success': False, 'error': 'Could not establish connection to the database'}], safe=False)
+            return JsonResponse([{'success': False, 'error': 'Could not establish connection to the database.'}], safe=False)
 
+
+# Create users view
 @csrf_exempt
 def create_user_view(request):
     roles_numbers = {'admin':1, 'supervisor':2, 'technician':3, 'student':4}
@@ -103,14 +108,36 @@ def create_user_view(request):
              return JsonResponse({'sucess' : False, 'message' : inst})
         
 
-        return JsonResponse({'success' : True, 'message' : 'User created succesfully!'})
+        return JsonResponse({'success' : True, 'message' : 'User created successfully!'})
     else:
         return JsonResponse({'sucess' : False, 'message' : 'There was a problem.'})
 
+# Create patient view
+@csrf_exempt
+def create_patient_view(request):
 
+    name = str(json.loads(request.body.decode('utf-8'))['name'])
+    dob = str(json.loads(request.body.decode('utf-8'))['dob'])
+    gender = str(json.loads(request.body.decode('utf-8'))['gender'])
 
+    try:
+        data = [name, dob, gender]
+        cursor.execute(REGISTER_NEW_PATIENT, (name, dob, gender))
+    except Exception as inst:
+        return JsonResponse({'success' : False, 'message' : inst})
+
+    res = {'success': True, 'message': 'Patient registered successfully!'}
+    print(res, data)
+    return JsonResponse(res)
+
+# Get patients view
+def get_patients(request):
+    return JsonResponse({'success': True, 'message': 'Patients retrieved', 'data':'patient list'})
+
+# Create sample view
 def create_sample_view(request):
     return JsonResponse({'success': True, 'message': 'Sample created successfully'})
+
 
 '''
 def user(request):

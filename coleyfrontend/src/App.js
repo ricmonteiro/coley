@@ -5,7 +5,9 @@ import SelectRoles from './screens/SelectRoleScreen';
 import MainDashboard from './screens/MainDashboard';
 import CreateUser from './screens/CreateUserScreen';
 import CreateSample from './screens/CreateSampleScreen';
+import CreatePatient from './screens/CreatePatientScreen';
 import { Routes, Route } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
         <Route path="/dashboard" element={<MainDashboard />}/>
         <Route path="/new_user" element={<CreateUser/>}/>
         <Route path="/new_sample" element={<CreateSample/>}/>
+        <Route path="/new_patient" element={<CreatePatient/>}/>
       </Routes>
     </div>
   )
