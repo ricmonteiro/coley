@@ -31,7 +31,7 @@ function CreatePatient() {
     const handleSubmit = (event) => {
       event.preventDefault();
   
-      const formData = {
+      var formData = {
         name: name,
         dob: dob,
         gender: gender
@@ -51,6 +51,12 @@ function CreatePatient() {
           setSubmitError(error)
           console.error('There was a problem submitting the form: ', error);
         });
+
+        formData = {
+          name: '',
+          dob: '',
+          gender: '',
+        };
     };
   
     const handleCancel = (event) => {

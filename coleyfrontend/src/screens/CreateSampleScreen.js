@@ -2,6 +2,7 @@ import React from 'react'
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { Form, Button, Row, Col} from 'react-bootstrap'
 
 
 
@@ -19,10 +20,10 @@ function CreateSample() {
 
     
       return (
-        <div>
-          <h1>Create New Sample</h1>
+        <Form>
+          <Form.Label>Create New Sample</Form.Label>
           
-        </div>
+        </Form>
       );
 }
 

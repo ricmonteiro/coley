@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-import {Row, Col, Form, Button} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
 
 
 function SelectRoles() {
@@ -64,7 +64,9 @@ function SelectRoles() {
   return (
     <div className="role-selection-container ">
 
-    <div className='role-selection-form'>
+    {loading && <h2>Loading roles...</h2>}
+    {!loading && <div className='role-selection-form'>
+    
 
     <h2>Select Your Role</h2>
     
@@ -83,7 +85,7 @@ function SelectRoles() {
         </div>       
       ))}</ul>
 
-      </div>
+      </div>}
       <br />    
       <div className="role-selection-buttons">
       <Button className='button m-2' disabled={!selectedRole} onClick={handleSubmit}>Continue</Button>
