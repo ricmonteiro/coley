@@ -13,5 +13,6 @@ urlpatterns = [
     path('user_roles/', views.user_roles, name='user-roles'),
     path('new_sample/', views.create_sample_view, name='create-sample'),
     path('new_patient/', views.create_patient_view, name='create-patient'),
+    path('patient_list/', views.get_patients, name='get-patients'),
 
 ]

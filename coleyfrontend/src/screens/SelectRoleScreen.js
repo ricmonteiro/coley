@@ -64,7 +64,6 @@ function SelectRoles() {
   return (
     <div className="role-selection-container ">
 
-    {loading && <h2>Loading roles...</h2>}
     {!loading && <div className='role-selection-form'>
     
 

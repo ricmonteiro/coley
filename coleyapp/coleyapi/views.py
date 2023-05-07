@@ -23,6 +23,9 @@ TISSUES_AVAILABLE = "SELECT * FROM tissuetype"
 SAMPLE_INFORMATION = "SELECT * FROM sample_information(%d)"
 SAMPLE_LIST_FOR_USER = "SELECT * FROM sample_list_for_user(%d)"
 
+# Patient PL/pgSQL functions
+PATIENT_LIST = "SELECT to_jsonb(p) FROM patients p"
+
 ## PL/pgSQL procedures
 REGISTER_NEW_SAMPLE = "CALL register_new_sample(%d, %s, %s, %d, %d, %d, %d, %s)"
 REGISTER_NEW_CUT = "CALL register_new_cut(%d, %d, %s, %d)"
@@ -88,6 +91,7 @@ def user_roles(request):
 
 
 # Create users view
+
 @csrf_exempt
 def create_user_view(request):
     roles_numbers = {'admin':1, 'supervisor':2, 'technician':3, 'student':4}
@@ -132,7 +136,11 @@ def create_patient_view(request):
 
 # Get patients view
 def get_patients(request):
-    return JsonResponse({'success': True, 'message': 'Patients retrieved', 'data':'patient list'})
+    print('Request successful')
+    cursor.execute(PATIENT_LIST)
+    data = cursor.fetchall()
+    print(data[0])
+    return JsonResponse({'success': True, 'message': 'Patients retrieved!', 'data': data})
 
 # Create sample view
 def create_sample_view(request):
