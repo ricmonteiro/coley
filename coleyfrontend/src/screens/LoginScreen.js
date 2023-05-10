@@ -22,8 +22,6 @@ function Login() {
         }})
       .then((response) => {
         if (response.data.success) {
-          //setIsLogged(response.data.success)
-          console.log(response.data.success)
           const isLogged = response.data.success
           navigate('/select_role', {state: { isLogged }});
         } else {

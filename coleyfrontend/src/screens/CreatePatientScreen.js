@@ -17,10 +17,8 @@ function CreatePatient() {
     const [successMessage, setSuccessMessage] = useState('')
     const [submitError, setSubmitError] = useState('')
     const options = [
-        {value: null, label:"Select gender"},
         { value: "female", label: "Female" },
         { value: "male", label: "Male" },
-        { value: "other", label: "Other" }
       ];
     
     useEffect(() => {
@@ -29,6 +27,8 @@ function CreatePatient() {
     
     const handleSubmit = (event) => {
       event.preventDefault();
+
+      console.log(gender)
   
       var formData = {
         name: name,
@@ -36,7 +36,6 @@ function CreatePatient() {
         gender: gender
       };
       
-  
       axios.post('http://localhost:8000/api/new_patient/', formData, {
         headers: {
           'Content-Type': 'application/json',
@@ -47,15 +46,9 @@ function CreatePatient() {
           console.log(response.data);
         })
         .catch(error => {
-          setSubmitError(error)
-          console.error('There was a problem submitting the form: ', error);
+          error.message = 'Please fill all the fields.'
+          setSubmitError(error.message)
         });
-
-        formData = {
-          name: '',
-          dob: '',
-          gender: '',
-        };
     };
   
     const handleCancel = (event) => {
@@ -92,7 +85,9 @@ function CreatePatient() {
          <Form.Label>Gender:
           <Form.Select
         value={gender}
-        onChange={handleChange}>
+        onChange={handleChange}
+        placeholder='Select gender'>
+        <option value="" disabled selected>Select gender</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -100,8 +95,7 @@ function CreatePatient() {
         ))}
         </Form.Select>
         </Form.Label>
-        {successMessage && <Alert variant='success'>{successMessage}</Alert>}
-        {submitError && <Alert variant='danger'>{submitError}</Alert>}
+        {(successMessage && <Alert variant='success'>{successMessage}</Alert>) || (submitError && <Alert variant='danger'>{submitError}</Alert>)}
         <Button  className='button m-2' type="submit">Create patient</Button>
         <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
       </Form>

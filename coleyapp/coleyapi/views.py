@@ -19,12 +19,12 @@ AUTHENTICATED_USER = "SELECT authenticated_user(%d)"
 USER_AVAILABLE_ROLES = "SELECT user_available_roles(%d)"
 
 # Sample PL/pgSQL functions
-TISSUES_AVAILABLE = "SELECT * FROM tissuetype"
+TISSUES_AVAILABLE = "SELECT to_json(t) FROM tissuetype t"
 SAMPLE_INFORMATION = "SELECT * FROM sample_information(%d)"
 SAMPLE_LIST_FOR_USER = "SELECT * FROM sample_list_for_user(%d)"
 
 # Patient PL/pgSQL functions
-PATIENT_LIST = "SELECT to_jsonb(p) FROM patients p"
+PATIENT_LIST = "SELECT to_json(p) FROM patients p"
 
 ## PL/pgSQL procedures
 REGISTER_NEW_SAMPLE = "CALL register_new_sample(%d, %s, %s, %d, %d, %d, %d, %s)"
@@ -123,12 +123,14 @@ def create_patient_view(request):
     name = str(json.loads(request.body.decode('utf-8'))['name'])
     dob = str(json.loads(request.body.decode('utf-8'))['dob'])
     gender = str(json.loads(request.body.decode('utf-8'))['gender'])
+    if gender == 'Select gender':
+        return JsonResponse({'success': False, 'message': 'Please select gender.'})
 
     try:
         data = [name, dob, gender]
         cursor.execute(REGISTER_NEW_PATIENT, (name, dob, gender))
     except Exception as inst:
-        return JsonResponse({'success' : False, 'message' : inst})
+        return JsonResponse({'success' : False, 'message': inst})
 
     res = {'success': True, 'message': 'Patient registered successfully!'}
     print(res, data)
@@ -136,15 +138,19 @@ def create_patient_view(request):
 
 # Get patients view
 def get_patients(request):
-    print('Request successful')
     cursor.execute(PATIENT_LIST)
-    data = cursor.fetchall()
-    print(data[0])
+    data = cursor.fetchall()   
     return JsonResponse({'success': True, 'message': 'Patients retrieved!', 'data': data})
 
 # Create sample view
 def create_sample_view(request):
     return JsonResponse({'success': True, 'message': 'Sample created successfully'})
+
+def tissue_types(request):
+    cursor.execute(TISSUES_AVAILABLE)
+    data = cursor.fetchall()
+    print(data)
+    return JsonResponse({'success': True, 'message': 'Tissues retrieved!', 'data': data})
 
 
 '''
@@ -164,9 +170,4 @@ def user_list(request):
     cursor.execute(USER_LIST)
     data = cursor.fetchall()
     data = data[0][0]
-    return JsonResponse(data, safe=False)
-
-def tissue_types(request):
-    cursor.execute(TISSUES_AVAILABLE)
-    data = cursor.fetchall()
     return JsonResponse(data, safe=False)'''
