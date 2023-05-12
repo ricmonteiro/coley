@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Form, Button, Row, Col} from 'react-bootstrap'
+import { Form, Button, Alert } from 'react-bootstrap'
 import axios from 'axios'
 
 
@@ -9,126 +9,211 @@ function CreateSample() {
   const navigate = useNavigate();
   const location = useLocation();
   const selectedRole = location.state && location.state.selectedRole;
-  const isLogged = location.state && location.state.isLogged
+  const isLogged = location.state && location.state.isLogged;
+  const authUser = location.state && location.state.authUser;
+
   const [loading, setLoading] = useState('')
   const [error, setError] = useState('')
   const [patientList, setPatientList] = useState([])
   const [tissueTypes, setTissueTypes] = useState([])
-  
+  const [tumorTypes, setTumorTypes] = useState([])
+  const [temperatures, setTemperatures] = useState([])
+  const [containers, setContainers] = useState([])
+
+
   const [selectedPatient, setSelectedPatient] = useState('')
   const [selectedTissue, setSelectedTissue] = useState('')
+  const [selectedTumor, setSelectedTumor] = useState('')
+  const [selectedTemperature, setSelectedTemperature] = useState('')
+  const [origin, setOrigin] = useState('')
+  const [selectedUser, setSelectedUser] = useState('')
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedContainer, setSelectedContainer] = useState('')
 
+  const [successMessage, setSuccessMessage] = useState('')
+  const [submitError, setSubmitError] = useState('')
 
- 
- 
-  /*Sample states */
-  useEffect(() => {
-    if(isLogged){
-    setLoading(true)
+  let sampleCreateEndpoints = [
+    "/patient_list/",
+    "/tissuetypes/",
+    "/tumortypes/",
+    "/temperatures/",
+    "/containers/",
+  ]
 
-  /*Get patients*/
-    axios.get("/patient_list/")
-    .then((response1) => {
-      setPatientList(response1.data.data);
-      setLoading(false)}
-    )
-    .catch((error1) => {
-      setError("An error occurred while retrieving the patients.");
-      console.error(error1);
-    });
-    
-  /*Get tissues*/
-    setLoading(true)
-    axios.get("/tissuetypes/")
-    .then((response2) => {
-      setTissueTypes(response2.data.data)
-      setLoading(false)
-      console.log(response2.data.data)}
-    )
-    .catch((error2) => {
-      setError('An error occurred while retrieving the tissue types.')
-      console.log(error2)
-    })}
-    else{navigate('/')}}, [navigate, isLogged, selectedRole]);
+  useEffect(() => { 
+    if(isLogged && authUser){
+    const fieldData = async () => { if(isLogged){
+      setLoading(true)
+      try {
+      axios.all(sampleCreateEndpoints.map((endpoint) => axios.get(endpoint))).then(
+        axios.spread(({data: patients}, {data:tissues}, {data:tumors}, {data:temperatures}, {data:containers}) => {
+          setPatientList(patients.data)
+          setTissueTypes(tissues.data)
+          setTumorTypes(tumors.data)
+          setTemperatures(temperatures.data)
+          setContainers(containers.data)    
+  
+        })
+      );}catch{
+        setError("The data necessary to create a sample is not available")
+      }
+      
+    }}
+    fieldData()
+    setLoading(false)
+    setSelectedUser(authUser["0"]["id"])
+  }else{navigate('/')}},[authUser, isLogged])
   
   const handleSubmit = (event) => {
 
       event.preventDefault();
-      console.log(event.target.value)
-    /*user_id, origin, patient_id, tumor_type_id, tissue_type_id, entry_date, 
-    # temperature_id, container_id, "location"*/
+      /*user_id, origin, patient_id, tumor_type_id, tissue_type_id, entry_date, temperature_id, container_id, "location"*/
       var formData = {
+        user: selectedUser,
+        origin: origin,
         selectedPatient: selectedPatient,
+        selectedTumor: selectedTumor,
         selectedTissue: selectedTissue,
-        selectedDate: selectedDate
+        selectedDate: selectedDate,
+        selectedTemperature: selectedTemperature,
+        selectedContainer: selectedContainer,
         };
+
+        axios.post('/new_sample/', formData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then(response => {
+            setSuccessMessage(response.data.message)
+          })
+          .catch(error => {
+            error.message = 'There was an error registering sample. '
+            setSubmitError(error.message)
+          });
     }
 
     const handleCancel = (event) => {
-      navigate('/dashboard', { state : { isLogged, selectedRole }})
+      navigate('/dashboard', { state : { isLogged, selectedRole, authUser }})
     }
 
     const handleChangePatient = (event) => {
       setSelectedPatient(event.target.value)
-      console.log(event.target.value)
     }
-
+    
+    const handleChangeOrigin = (event) => {
+      setOrigin(event.target.value)    
+    }
+    
     const handleChangeTissue = (event) => {
       setSelectedTissue(event.target.value)
-      console.log(event.target.value)
-    }    
+    } 
 
+    const handleChangeTumor = (event) => {
+      setSelectedTumor(event.target.value)
+    }     
+    
     const handleChangeDate = (event) => {
-      setSelectedDate(event.target.value)
-      
-      console.log(event.target.value)
+      setSelectedDate(event.target.value)    
     }
+
+    const handleChangeTemperature = (event) => {
+      setSelectedTemperature(event.target.value)
+    } 
+
+    const handleChangeContainer = (event) => {
+      setSelectedContainer(event.target.value)
+    } 
+
       return (
-        <Form>
-          {loading}
+        <div>
+          {loading && <h1>Retrieving data...</h1>}
+          <Form onSubmit={handleSubmit}>
           <Form.Label>Select patient
           <Form.Select
         value={selectedPatient}
-        onChange={handleChangePatient}
-        >
-        <option value="" disabled selected>Select patient</option>
+        onChange={handleChangePatient}>
+        <option value="" disabled>Select patient</option>
         {patientList.map((patient) => {
         return (
-          <option key={patient["0"]["id"]} value={patient["0"]["id"]}>{patient["0"]["id"]} - {patient["0"]["patient_name"]}</option>
+          <option key={patient["0"]["id"]} value={patient["0"]["id"]}>{patient["0"]["id"]} : {patient["0"]["patient_name"]}</option>
         );
       })}
-        </Form.Select>
-        </Form.Label>
 
-        <Form.Label htmlFor="inputPassword5">Origin</Form.Label>
+      </Form.Select>
+      </Form.Label>
+
+        <Form.Label>Origin</Form.Label>
       <Form.Control
         type="text"
+        onChange={handleChangeOrigin}
       />
+
+      <Form.Label>Select tumor
+          <Form.Select
+          value={selectedTumor}
+          onChange={handleChangeTumor}>
+            <option value="" disabled>Select tumor</option>
+            {tumorTypes.map((tumor) => {
+              return (
+                <option key={tumor["0"]["id"]} value={tumor["0"]["id"]}>{tumor["0"]["tumor_description"]}</option>
+              );
+            })}
+                     
+
+          </Form.Select>
+          </Form.Label>
 
         <Form.Label>Select tissue type
           <Form.Select
           value={selectedTissue}
           onChange={handleChangeTissue}>
-            <option value="" disabled selected>Select tissue</option>
+            <option value="" disabled>Select tissue</option>
             {tissueTypes.map((tissue) => {
               return (
-                <option key={tissue["0"]["id"]} value={tissue["0"]["tissue_description"]}>{tissue["0"]["tissue_description"]}</option>
+                <option key={tissue["0"]["id"]} value={tissue["0"]["id"]}>{tissue["0"]["tissue_description"]}</option>
               );
             })}
-                     
 
         </Form.Select>
-        </Form.Label>
-      
+        </Form.Label>    
 
         <Form.Label>Select date</Form.Label>
         <Form.Control type="date" value={selectedDate} name="entry-date" placeholder="Date of Birth" onChange={handleChangeDate} />  
 
+        <Form.Label>Select temperature
+          <Form.Select
+          value={selectedTemperature}
+          onChange={handleChangeTemperature}>
+            <option value="" disabled>Select temperature</option>
+            {temperatures.map((temperature) => {
+              return (
+                <option key={temperature["0"]["id"]} value={temperature["0"]["id"]}>{temperature["0"]["temperature_desc"]}</option>
+              );
+            })} 
+        </Form.Select>
+        </Form.Label>
+
+        <Form.Label>Select container where sample will be stored:
+          <Form.Select
+          value={selectedContainer}
+          onChange={handleChangeContainer}>
+            <option value="" disabled>Select container</option>
+            {containers.map((container) => {
+              return (
+                <option key={container["0"]["id"]} value={container["0"]["id"]}>{container["0"]["container_name"]}</option>
+              );
+            })} 
+        </Form.Select>
+        </Form.Label>
+
           {error && <p>{error}</p>}
-          <Button className='button m-2' disabled={!selectedRole} onClick={handleSubmit}>Register patient</Button>
+          {(successMessage && <Alert variant='success'>{successMessage}</Alert>) || (submitError && <Alert variant='danger'>{submitError}</Alert>)}
+          <Button className='button m-2' type='Submit'>Register sample</Button>
           <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
-        </Form>
+          </Form>
+          </div>  
       );
 }
 

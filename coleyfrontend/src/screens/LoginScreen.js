@@ -23,7 +23,8 @@ function Login() {
       .then((response) => {
         if (response.data.success) {
           const isLogged = response.data.success
-          navigate('/select_role', {state: { isLogged }});
+          const authUser = response.data.user[0]
+          navigate('/select_role', {state: { isLogged, authUser }});
         } else {
           setError(response.data.error);
         }

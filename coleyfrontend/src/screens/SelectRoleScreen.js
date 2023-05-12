@@ -11,6 +11,8 @@ function SelectRoles() {
   const [loading, setLoading] = useState(false)
   const location = useLocation();
   const isLogged = location.state && location.state.isLogged;
+  const authUser = location.state && location.state.authUser;
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,7 +51,7 @@ function SelectRoles() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate('/dashboard', { state:{ selectedRole, isLogged } });
+    navigate('/dashboard', { state:{ selectedRole, isLogged, authUser } });
   };
 
   if (error) {

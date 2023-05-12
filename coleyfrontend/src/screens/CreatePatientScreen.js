@@ -29,14 +29,14 @@ function CreatePatient() {
       event.preventDefault();
 
       console.log(gender)
-  
+
       var formData = {
         name: name,
         dob: dob,
         gender: gender
       };
       
-      axios.post('http://localhost:8000/api/new_patient/', formData, {
+      axios.post('/new_patient/', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -58,8 +58,7 @@ function CreatePatient() {
         setGender(event.target.value);
         console.log(gender)
       };
-  
-  
+
     return (
       <Form onSubmit={handleSubmit}>
         <h2>Insert patient details</h2>

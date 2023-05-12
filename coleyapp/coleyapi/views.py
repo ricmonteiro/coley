@@ -15,19 +15,24 @@ cursor = connection.cursor()
 ## PL/pgSQL functions
 # User PL/pgSQL functions
 USER_LIST = "SELECT user_list()"
-AUTHENTICATED_USER = "SELECT authenticated_user(%d)"
+AUTHENTICATED_USER = "SELECT to_json(u) FROM authenticated_user(%d) u"
 USER_AVAILABLE_ROLES = "SELECT user_available_roles(%d)"
 
 # Sample PL/pgSQL functions
 TISSUES_AVAILABLE = "SELECT to_json(t) FROM tissuetype t"
+TUMORS_AVAILABLE = "SELECT to_json(tu) FROM tumortype tu"
+TEMPERATURES_AVAILABLE = "SELECT to_json(t) FROM temperature t"
 SAMPLE_INFORMATION = "SELECT * FROM sample_information(%d)"
 SAMPLE_LIST_FOR_USER = "SELECT * FROM sample_list_for_user(%d)"
+CONTAINERS_AVAILABLE = "SELECT to_json(c) FROM containers c"
 
 # Patient PL/pgSQL functions
 PATIENT_LIST = "SELECT to_json(p) FROM patients p"
 
 ## PL/pgSQL procedures
-REGISTER_NEW_SAMPLE = "CALL register_new_sample(%d, %s, %s, %d, %d, %d, %d, %s)"
+# (user_id, origin, patient_id, tumor_type_id, tissue_type_id, entry_date, 
+# temperature_id, container_id, "location")
+REGISTER_NEW_SAMPLE = "CALL register_new_sample(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 REGISTER_NEW_CUT = "CALL register_new_cut(%d, %d, %s, %d)"
 
 REGISTER_NEW_USER = "CALL create_new_user(%s,%s,%s,%s,%s,%s)"
@@ -58,11 +63,9 @@ def login_view(request):
             return JsonResponse({'success': True, 'user': authenticated_user})
            
         else:
-            is_logged = False
             return JsonResponse({'success': False, 'error': 'Invalid username or password', 'is_logged': True})
             
     else:
-        is_logged = False
         return JsonResponse({'success': False, 'error': 'Method not allowed', 'is_logged': False})
     
 @csrf_exempt
@@ -115,43 +118,82 @@ def create_user_view(request):
         return JsonResponse({'success' : True, 'message' : 'User created successfully!'})
     else:
         return JsonResponse({'sucess' : False, 'message' : 'There was a problem.'})
-
+    
 # Create patient view
 @csrf_exempt
 def create_patient_view(request):
-
     name = str(json.loads(request.body.decode('utf-8'))['name'])
     dob = str(json.loads(request.body.decode('utf-8'))['dob'])
     gender = str(json.loads(request.body.decode('utf-8'))['gender'])
-    if gender == 'Select gender':
-        return JsonResponse({'success': False, 'message': 'Please select gender.'})
-
+    
     try:
-        data = [name, dob, gender]
         cursor.execute(REGISTER_NEW_PATIENT, (name, dob, gender))
     except Exception as inst:
         return JsonResponse({'success' : False, 'message': inst})
+    return JsonResponse({'success': True, 'message': 'Patient registered successfully!'})
 
-    res = {'success': True, 'message': 'Patient registered successfully!'}
-    print(res, data)
-    return JsonResponse(res)
+
+
+@csrf_exempt
+# Create sample view
+def create_sample_view(request):
+    if request.method == 'POST':
+        userid = int(json.loads(request.body.decode('utf-8'))['user'])
+        origin = str(json.loads(request.body.decode('utf-8'))['origin'])
+        patient = int(json.loads(request.body.decode('utf-8'))['selectedPatient'])
+        tumor = int(json.loads(request.body.decode('utf-8'))['selectedTumor'])
+        tissue = int(json.loads(request.body.decode('utf-8'))['selectedTissue'])
+        date_creation = str(json.loads(request.body.decode('utf-8'))['selectedDate'])
+        temperature = int(json.loads(request.body.decode('utf-8'))['selectedTemperature'])
+        container = int(json.loads(request.body.decode('utf-8'))['selectedContainer'])
+        print(userid, origin, patient, tumor, tissue, date_creation, temperature, container)
+        #CALL register_new_sample(%d, %s, %d, %d, %d, %d, %d, %s, %s)"
+
+        # user_id, origin, patient_id, tumor_type_id, tissue_type_id, entry_date, temperature_id, container_id, "location" #
+        cursor.execute(REGISTER_NEW_SAMPLE, (userid, origin, patient, tumor, tissue, temperature, container, None, date_creation))
+        return JsonResponse({'success': True, 'message' :'Sample created!'})
+
+        #return JsonResponse({'success': False, 'message' :'Registering failed...'})
+    
+
+    
+
 
 # Get patients view
 def get_patients(request):
-    cursor.execute(PATIENT_LIST)
-    data = cursor.fetchall()   
+    data = []
+    while len(data) == 0:
+        cursor.execute(PATIENT_LIST)
+        data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Patients retrieved!', 'data': data})
 
-# Create sample view
-def create_sample_view(request):
-    return JsonResponse({'success': True, 'message': 'Sample created successfully'})
-
 def tissue_types(request):
-    cursor.execute(TISSUES_AVAILABLE)
-    data = cursor.fetchall()
-    print(data)
+    data = []
+    while len(data) == 0:
+        cursor.execute(TISSUES_AVAILABLE)
+        data = cursor.fetchall()   
     return JsonResponse({'success': True, 'message': 'Tissues retrieved!', 'data': data})
 
+def tumor_types(request):
+    data = []
+    while len(data) == 0:
+        cursor.execute(TUMORS_AVAILABLE)
+        data = cursor.fetchall()
+    return JsonResponse({'success': True, 'message': 'Tumors retrieved!', 'data': data})
+
+def temperatures(request):
+    data = []
+    while len(data) == 0:
+        cursor.execute(TEMPERATURES_AVAILABLE)
+        data = cursor.fetchall()
+    return JsonResponse({'success': True, 'message': 'Temperatures retrieved!', 'data': data})
+
+def containers(request):
+    data = []
+    while len(data) == 0:
+        cursor.execute(CONTAINERS_AVAILABLE)
+        data = cursor.fetchall()
+    return JsonResponse({'success': True, 'message': 'Containers retrieved!', 'data':data})
 
 '''
 def user(request):
@@ -170,4 +212,5 @@ def user_list(request):
     cursor.execute(USER_LIST)
     data = cursor.fetchall()
     data = data[0][0]
-    return JsonResponse(data, safe=False)'''
+    return JsonResponse(data, safe=False)
+'''

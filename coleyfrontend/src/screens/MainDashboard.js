@@ -9,10 +9,12 @@ import { Button } from 'react-bootstrap'
 function MainDashboard() {
   const location = useLocation();
   const selectedRole = location.state && location.state.selectedRole;
-  const isLogged = location.state && location.state.isLogged
+  const isLogged = location.state && location.state.isLogged;
+  const authUser = location.state && location.state.authUser;
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(authUser)
     if(!isLogged){
       navigate('/')}});
 
@@ -39,9 +41,14 @@ function MainDashboard() {
 
   const handleRegisterNewSample = () => {
       const isLogged = true
-      navigate('/new_sample', { state: { isLogged, selectedRole } });
+      navigate('/new_sample', { state: { isLogged, selectedRole, authUser } });
     
       }
+  const handleRegisterNewCut = () => {
+        const isLogged = true
+        navigate('/new_cut', { state: { isLogged, selectedRole, authUser } });
+      
+        }
 
   const handleRegisterNewPatient = () => {
       const isLogged = true
@@ -53,10 +60,14 @@ function MainDashboard() {
     <div className='dash'>
       <h1>Dashboard</h1>
       {<p>Role: {selectedRole}</p>}
-      {<p>{isLogged}</p>}
+
+
+      {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewPatient}>New patient</Button>}   
+      {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>New sample</Button>}
+      {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewCut}>New cut</Button>}
+      {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>New analysis</Button>}
+      {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>Upload result</Button>}
       {selectedRole === 'Admin' && <Button className='button m-2' onClick={handleCreateNewUser}>Create new user</Button>}
-      {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>Register new sample</Button>}
-      {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewPatient}>Register new patient</Button>}
       <Button className='role-selection-buttons button m-2' style={{ backgroundColor: "black" }} onClick={handleLogout}>Logout</Button>
 
 
