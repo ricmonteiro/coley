@@ -13,6 +13,7 @@ function CreateUser() {
   const location = useLocation();
   const selectedRole = location.state && location.state.selectedRole;
   const isLogged = location.state && location.state.isLogged;
+  const authUser = location.state && location.state.authUser
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
   const [username, setUsername] = useState('');
@@ -68,7 +69,7 @@ function CreateUser() {
   };
 
   const handleCancel = (event) => {
-    navigate('/dashboard', { state : { isLogged, selectedRole } })
+    navigate(-1)
   }
 
   const passwordMatch = password === passwordConfirm;

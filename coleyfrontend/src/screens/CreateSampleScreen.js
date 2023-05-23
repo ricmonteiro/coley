@@ -20,7 +20,6 @@ function CreateSample() {
   const [temperatures, setTemperatures] = useState([])
   const [containers, setContainers] = useState([])
 
-
   const [selectedPatient, setSelectedPatient] = useState('')
   const [selectedTissue, setSelectedTissue] = useState('')
   const [selectedTumor, setSelectedTumor] = useState('')
@@ -33,19 +32,22 @@ function CreateSample() {
   const [successMessage, setSuccessMessage] = useState('')
   const [submitError, setSubmitError] = useState('')
 
-  let sampleCreateEndpoints = [
-    "/patient_list/",
-    "/tissuetypes/",
-    "/tumortypes/",
-    "/temperatures/",
-    "/containers/",
-  ]
+
 
   useEffect(() => { 
-    if(isLogged && authUser){
-    const fieldData = async () => { if(isLogged){
-      setLoading(true)
+    if(isLogged){
+
+    const fieldData = async () => { 
+      let sampleCreateEndpoints = [
+        "/patient_list/",
+        "/tissuetypes/",
+        "/tumortypes/",
+        "/temperatures/",
+        "/containers/",
+      ]
+      
       try {
+      setLoading(true)
       axios.all(sampleCreateEndpoints.map((endpoint) => axios.get(endpoint))).then(
         axios.spread(({data: patients}, {data:tissues}, {data:tumors}, {data:temperatures}, {data:containers}) => {
           setPatientList(patients.data)
@@ -55,15 +57,18 @@ function CreateSample() {
           setContainers(containers.data)    
   
         })
-      );}catch{
+        
+      );setLoading(false)}catch
+      {
         setError("The data necessary to create a sample is not available")
       }
       
-    }}
+    }
+
     fieldData()
     setLoading(false)
     setSelectedUser(authUser["0"]["id"])
-  }else{navigate('/')}},[authUser, isLogged])
+  }else{navigate('/')}},[navigate, authUser, isLogged])
   
   const handleSubmit = (event) => {
 
@@ -95,6 +100,8 @@ function CreateSample() {
     }
 
     const handleCancel = (event) => {
+      console.log(isLogged)
+
       navigate('/dashboard', { state : { isLogged, selectedRole, authUser }})
     }
 
@@ -128,8 +135,11 @@ function CreateSample() {
 
       return (
         <div>
-          {loading && <h1>Retrieving data...</h1>}
+          
+         
           <Form onSubmit={handleSubmit}>
+           
+          <h1>Register a new sample</h1>
           <Form.Label>Select patient
           <Form.Select
         value={selectedPatient}
@@ -212,6 +222,7 @@ function CreateSample() {
           {(successMessage && <Alert variant='success'>{successMessage}</Alert>) || (submitError && <Alert variant='danger'>{submitError}</Alert>)}
           <Button className='button m-2' type='Submit'>Register sample</Button>
           <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
+          
           </Form>
           </div>  
       );

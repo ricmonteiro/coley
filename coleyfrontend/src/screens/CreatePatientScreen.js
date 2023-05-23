@@ -11,6 +11,8 @@ function CreatePatient() {
     const location = useLocation();
     const selectedRole = location.state && location.state.selectedRole;
     const isLogged = location.state && location.state.isLogged
+    const authUser = location.state && location.state.authUser
+
     const [name, setName] = useState('');
     const [dob, setDob] = useState('');
     const [gender, setGender] = useState('')
@@ -25,10 +27,9 @@ function CreatePatient() {
       if(!isLogged){
         navigate('/')}});
     
+
     const handleSubmit = (event) => {
       event.preventDefault();
-
-      console.log(gender)
 
       var formData = {
         name: name,
@@ -43,7 +44,6 @@ function CreatePatient() {
       })
         .then(response => {
           setSuccessMessage(response.data.message)
-          console.log(response.data);
         })
         .catch(error => {
           error.message = 'Please fill all the fields.'
@@ -52,8 +52,10 @@ function CreatePatient() {
     };
   
     const handleCancel = (event) => {
-      navigate('/dashboard', {state : {isLogged, selectedRole}})
+      console.log(isLogged)
+      navigate(-1)
     }
+
     const handleChange = (event) => {
         setGender(event.target.value);
         console.log(gender)

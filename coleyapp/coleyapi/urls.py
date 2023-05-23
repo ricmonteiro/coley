@@ -18,5 +18,6 @@ urlpatterns = [
     path('tumortypes/', views.tumor_types, name='get-tumortypes'),
     path('temperatures/', views.temperatures, name='get-temperatures'),
     path('containers/', views.containers, name='get-containers'),
+    path('samples/', views.samples, name='get-samples'),
 
 ]

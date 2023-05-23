@@ -25,6 +25,7 @@ TEMPERATURES_AVAILABLE = "SELECT to_json(t) FROM temperature t"
 SAMPLE_INFORMATION = "SELECT * FROM sample_information(%d)"
 SAMPLE_LIST_FOR_USER = "SELECT * FROM sample_list_for_user(%d)"
 CONTAINERS_AVAILABLE = "SELECT to_json(c) FROM containers c"
+SAMPLES_AVAILABLE = "SELECT to_json(s) FROM sample s"
 
 # Patient PL/pgSQL functions
 PATIENT_LIST = "SELECT to_json(p) FROM patients p"
@@ -148,21 +149,17 @@ def create_sample_view(request):
         container = int(json.loads(request.body.decode('utf-8'))['selectedContainer'])
         print(userid, origin, patient, tumor, tissue, date_creation, temperature, container)
         #CALL register_new_sample(%d, %s, %d, %d, %d, %d, %d, %s, %s)"
-
         # user_id, origin, patient_id, tumor_type_id, tissue_type_id, entry_date, temperature_id, container_id, "location" #
         cursor.execute(REGISTER_NEW_SAMPLE, (userid, origin, patient, tumor, tissue, temperature, container, None, date_creation))
         return JsonResponse({'success': True, 'message' :'Sample created!'})
 
         #return JsonResponse({'success': False, 'message' :'Registering failed...'})
     
-
-    
-
-
 # Get patients view
 def get_patients(request):
     data = []
     while len(data) == 0:
+        time.sleep(0.5)
         cursor.execute(PATIENT_LIST)
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Patients retrieved!', 'data': data})
@@ -170,13 +167,15 @@ def get_patients(request):
 def tissue_types(request):
     data = []
     while len(data) == 0:
+        time.sleep(0.5)
         cursor.execute(TISSUES_AVAILABLE)
-        data = cursor.fetchall()   
+        data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Tissues retrieved!', 'data': data})
 
 def tumor_types(request):
     data = []
     while len(data) == 0:
+        time.sleep(0.5)
         cursor.execute(TUMORS_AVAILABLE)
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Tumors retrieved!', 'data': data})
@@ -184,6 +183,7 @@ def tumor_types(request):
 def temperatures(request):
     data = []
     while len(data) == 0:
+        time.sleep(0.5)
         cursor.execute(TEMPERATURES_AVAILABLE)
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Temperatures retrieved!', 'data': data})
@@ -191,9 +191,18 @@ def temperatures(request):
 def containers(request):
     data = []
     while len(data) == 0:
+        time.sleep(0.5)
         cursor.execute(CONTAINERS_AVAILABLE)
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Containers retrieved!', 'data':data})
+
+def samples(request):
+    data = []
+    while len(data) == 0:
+        time.sleep(0.5)
+        cursor.execute(SAMPLES_AVAILABLE)
+        data = cursor.fetchall()
+    return JsonResponse({'success': True, 'message': 'Samples retrieved successfully', 'data': data})
 
 '''
 def user(request):
