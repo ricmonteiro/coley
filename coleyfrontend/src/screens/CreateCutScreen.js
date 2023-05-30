@@ -19,10 +19,12 @@ function CreateCut() {
   const [selectedSample, setSelectedSample] = useState('')
   const [selectedDate, setSelectedDate] = useState('')
 
+  const [selectedCut, setSelectedCut] = useState('')
+
+
   useEffect(() => { 
     if(isLogged){
       axios.get('/samples').then(resp => {
-      console.log(resp.data.data[0]);
       setSamples(resp.data.data)
   });
   }else{navigate('/')}},[navigate])
@@ -30,17 +32,40 @@ function CreateCut() {
   const handleChangeSample = (event) => {
     setSelectedSample(event.target.value)
 
-    axios.get('/cuts_from_sample')
-    .then((response) => {
-      console.log(response.data.data)
-    }
-    ).catch((error) => {
-      console.error(error);
-      setError("An error occurred while retrieving the available cuts");
-    });
   }
 
+  useEffect(()=> {
+
+    console.log(selectedSample)
+
+    axios.get("/cuts_from_sample", { params: { sample: selectedSample } })
+    .then((response) => {
+      const cuts = response.data.data
+      setAvailableCuts(cuts)
+      
+    }
+    ).catch((error) => {
+
+      console.error(error);
+      setError("An error occurred while retrieving the available cuts");
+
+    });
+
+  },[selectedSample])
+
+
+  console.log(availableCuts)
+
+
+
+
+    /*setAvailableCuts(cuts)*/
+
   const handleCutsAvailable = (event) => {
+    console.log(event.target.value)
+  }
+
+  const handleChangeCut = (event) => {
     console.log(event.target.value)
   }
 
@@ -56,12 +81,10 @@ function CreateCut() {
     console.log(event.target.value)
   }
 
-
-
   return (
     <Form>
         <h1>Create a cut from a sample</h1>
-    
+
         <Form.Label>Select sample
         <Form.Select
         value={selectedSample}
@@ -72,10 +95,20 @@ function CreateCut() {
           <option key={sample["0"]["id"]} value={sample["0"]["id"]}>sample id: {sample["0"]["id"]}, origin: {sample["0"]["origin"]}, from {sample["0"]["entry_date"]}</option>
         );
       })}
+    </Form.Select>
+    </Form.Label>
 
 
-        
-
+    <Form.Label>Select parent cut (leave empty for a cut from the sample)
+        <Form.Select
+        value={selectedCut}
+        onChange={handleChangeCut}>
+        <option value="" disabled>Select parent cut</option>
+        {availableCuts.map((parentcuts) => {
+        return (
+          <option key={parentcuts["0"]["id"]} value={parentcuts["0"]["id"]}>cut id: {parentcuts["0"]["id"]}, purpose: {parentcuts["0"]["purpose"]}, at {parentcuts["0"]["cut_date"]}</option>
+        );
+      })}
     </Form.Select>
     </Form.Label>
 
@@ -85,18 +118,11 @@ function CreateCut() {
         onChange={handleChangePurpose}
       />
 
-
-
       <Form.Label>Select date</Form.Label>
         <Form.Control type="date" value={selectedDate} name="entry-date" placeholder="Date of Birth" onChange={handleChangeDate} />  
 
     <Button className='button m-2' type='Submit'>Create cut</Button>
     <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
-
-
-        
-        
-
     </Form>
   )
 }

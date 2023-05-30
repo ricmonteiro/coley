@@ -204,11 +204,12 @@ def samples(request):
 
 def get_cuts_from_sample(request):
     data = []
-    print(request)
-    #while len(data) == 0:
-        #cursor.execute(CUTS_FROM_SAMPLE % int(session.get(sampleid)))
-        #data = cursor.fetchall()
-    return JsonResponse({'success': True, 'message': 'Cuts from a given sample retrieved!', 'data' :data})
+    sample = request.GET['sample']
+    while len(data) == 0:
+        cursor.execute(CUTS_FROM_SAMPLE % int(sample))
+        data = cursor.fetchall()
+        print(data)
+    return JsonResponse({'success': True, 'message': 'Cuts from a given sample retrieved!', 'data': data})
 
 '''
 def user(request):
