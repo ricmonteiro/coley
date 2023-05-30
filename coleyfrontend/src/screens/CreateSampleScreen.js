@@ -32,8 +32,6 @@ function CreateSample() {
   const [successMessage, setSuccessMessage] = useState('')
   const [submitError, setSubmitError] = useState('')
 
-
-
   useEffect(() => { 
     if(isLogged){
 
@@ -135,8 +133,6 @@ function CreateSample() {
 
       return (
         <div>
-          
-         
           <Form onSubmit={handleSubmit}>
            
           <h1>Register a new sample</h1>

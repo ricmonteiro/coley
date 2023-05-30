@@ -26,6 +26,7 @@ SAMPLE_INFORMATION = "SELECT * FROM sample_information(%d)"
 SAMPLE_LIST_FOR_USER = "SELECT * FROM sample_list_for_user(%d)"
 CONTAINERS_AVAILABLE = "SELECT to_json(c) FROM containers c"
 SAMPLES_AVAILABLE = "SELECT to_json(s) FROM sample s"
+CUTS_FROM_SAMPLE = "SELECT * FROM get_all_cuts_from_sample(%d)"
 
 # Patient PL/pgSQL functions
 PATIENT_LIST = "SELECT to_json(p) FROM patients p"
@@ -34,8 +35,7 @@ PATIENT_LIST = "SELECT to_json(p) FROM patients p"
 # (user_id, origin, patient_id, tumor_type_id, tissue_type_id, entry_date, 
 # temperature_id, container_id, "location")
 REGISTER_NEW_SAMPLE = "CALL register_new_sample(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-REGISTER_NEW_CUT = "CALL register_new_cut(%d, %d, %s, %d)"
-
+REGISTER_NEW_CUT = "CALL register_new_cut(%s, %s, %s, %s)"
 REGISTER_NEW_USER = "CALL create_new_user(%s,%s,%s,%s,%s,%s)"
 REGISTER_NEW_PATIENT = "CALL create_new_patient(%s, %s, %s)"
 
@@ -83,7 +83,6 @@ def logout_view(request):
 def user_roles(request):
     if request.method == 'GET':
         try:
-            
             cursor.execute(USER_AVAILABLE_ROLES % int(session.get('_auth_user_id')))
             data = cursor.fetchone()
             if data is not None:
@@ -98,8 +97,8 @@ def user_roles(request):
 
 @csrf_exempt
 def create_user_view(request):
-    roles_numbers = {'admin':1, 'supervisor':2, 'technician':3, 'student':4}
 
+    roles_numbers = {'admin': 1, 'supervisor': 2, 'technician': 3, 'student': 4}
     if request.method == 'POST':
         username = str(json.loads(request.body.decode('utf-8'))['username'])
         firstname = str(json.loads(request.body.decode('utf-8'))['firstname'])
@@ -132,8 +131,6 @@ def create_patient_view(request):
     except Exception as inst:
         return JsonResponse({'success' : False, 'message': inst})
     return JsonResponse({'success': True, 'message': 'Patient registered successfully!'})
-
-
 
 @csrf_exempt
 # Create sample view
@@ -203,6 +200,15 @@ def samples(request):
         cursor.execute(SAMPLES_AVAILABLE)
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Samples retrieved successfully', 'data': data})
+
+
+def get_cuts_from_sample(request):
+    data = []
+    print(request)
+    #while len(data) == 0:
+        #cursor.execute(CUTS_FROM_SAMPLE % int(session.get(sampleid)))
+        #data = cursor.fetchall()
+    return JsonResponse({'success': True, 'message': 'Cuts from a given sample retrieved!', 'data' :data})
 
 '''
 def user(request):

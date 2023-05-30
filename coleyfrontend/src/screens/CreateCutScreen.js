@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState} from 'react';
 import axios from 'axios'
@@ -13,10 +13,11 @@ function CreateCut() {
   const authUser = location.state && location.state.authUser
 
   const [samples, setSamples] = useState([])
-
+  const [availableCuts, setAvailableCuts] = useState([])
+  const [error, setError] = useState('')
 
   const [selectedSample, setSelectedSample] = useState('')
-
+  const [selectedDate, setSelectedDate] = useState('')
 
   useEffect(() => { 
     if(isLogged){
@@ -28,31 +29,69 @@ function CreateCut() {
 
   const handleChangeSample = (event) => {
     setSelectedSample(event.target.value)
-  } 
+
+    axios.get('/cuts_from_sample')
+    .then((response) => {
+      console.log(response.data.data)
+    }
+    ).catch((error) => {
+      console.error(error);
+      setError("An error occurred while retrieving the available cuts");
+    });
+  }
+
+  const handleCutsAvailable = (event) => {
+    console.log(event.target.value)
+  }
+
+  const handleCancel = (event) => {
+    navigate('/dashboard', { state : { isLogged, selectedRole, authUser }})
+  }
+
+  const handleChangePurpose = (event) =>  {
+    console.log(event.target.value)
+  }
+
+  const handleChangeDate = (event) => {
+    console.log(event.target.value)
+  }
 
 
 
   return (
     <Form>
-
-
-      
-
         <h1>Create a cut from a sample</h1>
-
+    
         <Form.Label>Select sample
-          <Form.Select
+        <Form.Select
         value={selectedSample}
         onChange={handleChangeSample}>
         <option value="" disabled>Select sample</option>
         {samples.map((sample) => {
         return (
-          <option key={sample["0"]["id"]} value={sample["id"]}>sample id: {sample["0"]["id"]}, origin: {sample["0"]["origin"]}, from {sample["0"]["entry_date"]}</option>
+          <option key={sample["0"]["id"]} value={sample["0"]["id"]}>sample id: {sample["0"]["id"]}, origin: {sample["0"]["origin"]}, from {sample["0"]["entry_date"]}</option>
         );
       })}
 
-      </Form.Select>
-      </Form.Label>
+
+        
+
+    </Form.Select>
+    </Form.Label>
+
+    <Form.Label>Purpose</Form.Label>
+      <Form.Control
+        type="text"
+        onChange={handleChangePurpose}
+      />
+
+
+
+      <Form.Label>Select date</Form.Label>
+        <Form.Control type="date" value={selectedDate} name="entry-date" placeholder="Date of Birth" onChange={handleChangeDate} />  
+
+    <Button className='button m-2' type='Submit'>Create cut</Button>
+    <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
 
 
         

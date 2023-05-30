@@ -19,5 +19,6 @@ urlpatterns = [
     path('temperatures/', views.temperatures, name='get-temperatures'),
     path('containers/', views.containers, name='get-containers'),
     path('samples/', views.samples, name='get-samples'),
+    path('cuts_from_sample/', views.get_cuts_from_sample, name='get-cuts-from-sample')
 
 ]

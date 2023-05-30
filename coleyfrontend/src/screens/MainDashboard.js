@@ -59,7 +59,13 @@ function MainDashboard() {
   return (
     <div className='dash'>
       <h1>Dashboard</h1>
-      {<p>Role: {selectedRole}</p>}
+
+      {<h6>{authUser["0"]["first_name"]} {authUser["0"]["last_name"]}</h6>}
+      {<h6>role: <b>{selectedRole}</b></h6>}
+      {<h6>username: {authUser["0"]["username"]}</h6>}
+
+      
+
 
 
       {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewPatient}>New patient</Button>}   
@@ -67,7 +73,7 @@ function MainDashboard() {
       {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewCut}>New cut</Button>}
       {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>New analysis</Button>}
       {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>Upload result</Button>}
-      {selectedRole === 'Admin' && <Button className='button m-2' onClick={handleCreateNewUser}>Create new user</Button>}
+      {selectedRole === 'Admin' && <h5>Admin functions <p><Button className='button m-2' onClick={handleCreateNewUser}>Create new user</Button></p></h5>}
       <Button className='role-selection-buttons button m-2' style={{ backgroundColor: "black" }} onClick={handleLogout}>Logout</Button>
 
 
