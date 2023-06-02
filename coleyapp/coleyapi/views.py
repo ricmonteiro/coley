@@ -8,6 +8,8 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 import json, operator
 import time
+import os
+from django.conf import settings
 
 # connect to db
 cursor = connection.cursor()
@@ -26,7 +28,8 @@ SAMPLE_INFORMATION = "SELECT * FROM sample_information(%d)"
 SAMPLE_LIST_FOR_USER = "SELECT * FROM sample_list_for_user(%d)"
 CONTAINERS_AVAILABLE = "SELECT to_json(c) FROM containers c"
 SAMPLES_AVAILABLE = "SELECT to_json(s) FROM sample s"
-CUTS_FROM_SAMPLE = "SELECT * FROM get_all_cuts_from_sample(%d)"
+ALL_CUTS = "SELECT to_json(ct) FROM cut ct"
+CUTS_FROM_SAMPLE = "SELECT get_all_cuts_from_sample(%d)"
 
 # Patient PL/pgSQL functions
 PATIENT_LIST = "SELECT to_json(p) FROM patients p"
@@ -38,8 +41,14 @@ REGISTER_NEW_SAMPLE = "CALL register_new_sample(%s, %s, %s, %s, %s, %s, %s, %s, 
 REGISTER_NEW_CUT = "CALL register_new_cut(%s, %s, %s, %s)"
 REGISTER_NEW_USER = "CALL create_new_user(%s,%s,%s,%s,%s,%s)"
 REGISTER_NEW_PATIENT = "CALL create_new_patient(%s, %s, %s)"
+REGISTER_NEW_ANALYSIS = "CALL register_new_analysis(%s, %s, %s, %s, %s)"
 
+# auxiliary functions
+def create_media_directory():
+    media_dir = os.path.join(os.getcwd(), 'media')
 
+    if not os.path.exists(media_dir):
+        os.makedirs(media_dir)
 
 # Create your views here.
 
@@ -202,16 +211,48 @@ def samples(request):
     return JsonResponse({'success': True, 'message': 'Samples retrieved successfully', 'data': data})
 
 
+def cuts(request):
+    data = []
+    while len(data) == 0:
+        time.sleep(0.5)
+        cursor.execute(ALL_CUTS)
+        data = cursor.fetchall()
+    return JsonResponse({'success': True, 'message': 'Cuts retrieved successfully!', 'data': data})
+
 def get_cuts_from_sample(request):
     data = []
     sample = request.GET['sample']
     while len(data) == 0:
         cursor.execute(CUTS_FROM_SAMPLE % int(sample))
         data = cursor.fetchall()
-        print(data)
-    return JsonResponse({'success': True, 'message': 'Cuts from a given sample retrieved!', 'data': data})
+    return JsonResponse({'success': True, 'message': 'Cuts from a given sample retrieved!', 'data': data[0]})
+
+
+
+@csrf_exempt
+def file_upload(request):
+    if request.method == 'POST' and request.FILES['file']:
+        uploaded_file = request.FILES['file']
+        create_media_directory()
+        userid = int(request.POST['userid'])
+        cutid = int(request.POST['cutid'])
+        submitdate = request.POST['selectedDate']
+
+        uploaded_file.name = submitdate + '_' + 'user_' + str(userid) + '_' + 'cut_' + str(cutid) + '_' + uploaded_file.name
+        filename = uploaded_file.name
+        
+        file_path = os.path.join(settings.MEDIA_ROOT, uploaded_file.name)
+
+        with open(file_path, 'wb') as file:
+            for chunk in uploaded_file.chunks():
+                file.write(chunk)
+
+        #cursor.execute(CUTS_FROM_SAMPLE % (userid, cutid, submitdate, filename, None))
+        print(request.FILES.get('file'))
+        return JsonResponse({'success': True, 'message': 'Analysis result submitted!'})
 
 '''
+
 def user(request):
     id = 10
     cursor.execute(AUTHENTICATED_USER % id)
@@ -229,4 +270,5 @@ def user_list(request):
     data = cursor.fetchall()
     data = data[0][0]
     return JsonResponse(data, safe=False)
+
 '''

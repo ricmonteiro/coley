@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { useEffect } from 'react'
-import { Button } from 'react-bootstrap'
+import { Button, Row, Col, Container } from 'react-bootstrap'
 
 
 
@@ -44,11 +44,12 @@ function MainDashboard() {
       navigate('/new_sample', { state: { isLogged, selectedRole, authUser } });
     
       }
-  const handleRegisterNewCut = () => {
+      
+  /*const handleRegisterNewCut = () => {
         const isLogged = true
         navigate('/new_cut', { state: { isLogged, selectedRole, authUser } });
       
-        }
+        }*/
 
   const handleRegisterNewPatient = () => {
       const isLogged = true
@@ -56,28 +57,46 @@ function MainDashboard() {
       
         }
 
+  const handleRegisterNewAnalysis = () => {
+      const isLogged = true
+      navigate('/new_analysis', { state: { isLogged, selectedRole, authUser } })
+
+  }
+
+  const handleSamplesAndCuts = () => {
+    const isLogged = true
+    navigate('/samples_and_cuts', { state: { isLogged, selectedRole, authUser } })
+
+}
+
   return (
-    <div className='dash'>
+    <Container className='dash'>
+
       <h1>Dashboard</h1>
-
       {<h6>{authUser["0"]["first_name"]} {authUser["0"]["last_name"]}</h6>}
-      {<h6>role: <b>{selectedRole}</b></h6>}
-      {<h6>username: {authUser["0"]["username"]}</h6>}
-
+      {<h6><b>{selectedRole}</b></h6>}
+      <Row>
       
-
-
-
+      <Col>
+      <div className='dash'>
       {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewPatient}>New patient</Button>}   
       {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>New sample</Button>}
-      {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewCut}>New cut</Button>}
-      {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>New analysis</Button>}
-      {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>Upload result</Button>}
+      {/*selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewCut}>New cut</Button>*/}
+      {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewAnalysis}>New analysis</Button>}
+      {/*selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>Upload result</Button>*/}
       {selectedRole === 'Admin' && <h5>Admin functions <p><Button className='button m-2' onClick={handleCreateNewUser}>Create new user</Button></p></h5>}
+      </div>
+      </Col>
+      <Col>
+      <Button className='button m-2' onClick={handleSamplesAndCuts}>Samples and cuts</Button>
+      </Col>
+      <Col>
+
+      
+      </Col>
+      </Row>
       <Button className='role-selection-buttons button m-2' style={{ backgroundColor: "black" }} onClick={handleLogout}>Logout</Button>
-
-
-    </div>
+    </Container>
   );
 };
 

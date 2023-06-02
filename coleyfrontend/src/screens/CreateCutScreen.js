@@ -1,4 +1,4 @@
-import React from 'react'
+/*import React from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState} from 'react';
@@ -35,13 +35,12 @@ function CreateCut() {
   }
 
   useEffect(()=> {
-
     console.log(selectedSample)
 
     axios.get("/cuts_from_sample", { params: { sample: selectedSample } })
     .then((response) => {
-      const cuts = response.data.data
-      setAvailableCuts(cuts)
+
+      setAvailableCuts(response.data.data)
       
     }
     ).catch((error) => {
@@ -55,11 +54,7 @@ function CreateCut() {
 
 
   console.log(availableCuts)
-
-
-
-
-    /*setAvailableCuts(cuts)*/
+  console.log(samples)
 
   const handleCutsAvailable = (event) => {
     console.log(event.target.value)
@@ -99,18 +94,7 @@ function CreateCut() {
     </Form.Label>
 
 
-    <Form.Label>Select parent cut (leave empty for a cut from the sample)
-        <Form.Select
-        value={selectedCut}
-        onChange={handleChangeCut}>
-        <option value="" disabled>Select parent cut</option>
-        {availableCuts.map((parentcuts) => {
-        return (
-          <option key={parentcuts["0"]["id"]} value={parentcuts["0"]["id"]}>cut id: {parentcuts["0"]["id"]}, purpose: {parentcuts["0"]["purpose"]}, at {parentcuts["0"]["cut_date"]}</option>
-        );
-      })}
-    </Form.Select>
-    </Form.Label>
+    
 
     <Form.Label>Purpose</Form.Label>
       <Form.Control
@@ -127,4 +111,4 @@ function CreateCut() {
   )
 }
 
-export default CreateCut
+export default CreateCut;*/
