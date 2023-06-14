@@ -41,7 +41,7 @@ REGISTER_NEW_SAMPLE = "CALL register_new_sample(%s, %s, %s, %s, %s, %s, %s, %s, 
 REGISTER_NEW_CUT = "CALL register_new_cut(%s, %s, %s, %s)"
 REGISTER_NEW_USER = "CALL create_new_user(%s,%s,%s,%s,%s,%s)"
 REGISTER_NEW_PATIENT = "CALL create_new_patient(%s, %s, %s)"
-REGISTER_NEW_ANALYSIS = "CALL register_new_analysis(%s, %s, %s, %s, %s)"
+REGISTER_NEW_ANALYSIS = "CALL register_new_analysis(%s, %s, %s, %s)"
 
 # auxiliary functions
 def create_media_directory():
@@ -237,9 +237,10 @@ def file_upload(request):
         userid = int(request.POST['userid'])
         cutid = int(request.POST['cutid'])
         submitdate = request.POST['selectedDate']
+        filename = str(uploaded_file.name)
 
-        uploaded_file.name = submitdate + '_' + 'user_' + str(userid) + '_' + 'cut_' + str(cutid) + '_' + uploaded_file.name
-        filename = uploaded_file.name
+
+        uploaded_file.name = submitdate + '_' + 'user_' + str(userid) + '_' + 'cut_' + str(cutid) + '_' + filename
         
         file_path = os.path.join(settings.MEDIA_ROOT, uploaded_file.name)
 
@@ -247,7 +248,9 @@ def file_upload(request):
             for chunk in uploaded_file.chunks():
                 file.write(chunk)
 
-        #cursor.execute(CUTS_FROM_SAMPLE % (userid, cutid, submitdate, filename, None))
+        print(userid, cutid, submitdate, filename)
+
+        cursor.execute(REGISTER_NEW_ANALYSIS % (userid, cutid, submitdate, file_path))
         print(request.FILES.get('file'))
         return JsonResponse({'success': True, 'message': 'Analysis result submitted!'})
 

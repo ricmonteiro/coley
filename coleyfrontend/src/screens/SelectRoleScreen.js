@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-import {Button} from 'react-bootstrap'
+import { Button , Row, Col, Form } from 'react-bootstrap'
 
 
 function SelectRoles() {
@@ -72,19 +72,30 @@ function SelectRoles() {
     <h2>Select Your Role</h2>
     
       {error && <p>{error}</p>}
-      <ul>{roles.map((role) => (
-        <div key={role.role_id}>
-          <input className="role-selection-option label"
+
+     {roles.map((role) => (
+      <Row>
+        
+        <Col>
+          
+        <Form.Label htmlFor={role.role}>    
+          {role.role}</Form.Label>
+        
+        </Col>
+
+          
+        <Col>
+          <Form.Check className="role-selection-option label"
             type="radio"
             id={role.role}
             name="role"
             value={role.role}
             checked={selectedRole === role.role}
             onChange={handleRoleSelection} />
-          <label htmlFor={role.role}>    
-          {role.role}</label>
-        </div>       
-      ))}</ul>
+        </Col>
+            
+        </Row>       
+      ))}
 
       </div>}
       <br />    
