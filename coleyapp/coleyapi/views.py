@@ -253,3 +253,9 @@ def get_results(request):
     print(os.getcwd())
     return JsonResponse({'success': True, 'message': os.getcwd()})
 
+def get_analysis(request):
+    if request.method == 'GET':
+        cursor.execute(ALL_ANALYSIS)
+        data = cursor.fetchall()
+    return JsonResponse({'success': True, 'message': 'Analysis retrived successfully!', 'data': data})
+
