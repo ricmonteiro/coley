@@ -30,13 +30,12 @@ CONTAINERS_AVAILABLE = "SELECT to_json(c) FROM containers c"
 SAMPLES_AVAILABLE = "SELECT to_json(s) FROM sample s"
 ALL_CUTS = "SELECT to_json(ct) FROM cut ct"
 CUTS_FROM_SAMPLE = "SELECT get_all_cuts_from_sample(%d)"
+ALL_ANALYSIS = "SELECT * from analysis"
 
 # Patient PL/pgSQL functions
 PATIENT_LIST = "SELECT to_json(p) FROM patients p"
 
 ## PL/pgSQL procedures
-# (user_id, origin, patient_id, tumor_type_id, tissue_type_id, entry_date, 
-# temperature_id, container_id, "location")
 REGISTER_NEW_SAMPLE = "CALL register_new_sample(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 REGISTER_NEW_CUT = "CALL register_new_cut(%s, %s, %s, %s)"
 REGISTER_NEW_USER = "CALL create_new_user(%s,%s,%s,%s,%s,%s)"
@@ -60,7 +59,6 @@ def login_view(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
  
-
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -210,7 +208,6 @@ def samples(request):
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Samples retrieved successfully', 'data': data})
 
-
 def cuts(request):
     data = []
     while len(data) == 0:
@@ -227,8 +224,6 @@ def get_cuts_from_sample(request):
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Cuts from a given sample retrieved!', 'data': data[0]})
 
-
-
 @csrf_exempt
 def file_upload(request):
     if request.method == 'POST' and request.FILES['file']:
@@ -238,7 +233,6 @@ def file_upload(request):
         cutid = int(request.POST['cutid'])
         submitdate = request.POST['selectedDate']
         filename = str(uploaded_file.name)
-
 
         uploaded_file.name = submitdate + '_' + 'user_' + str(userid) + '_' + 'cut_' + str(cutid) + '_' + filename
         
@@ -250,28 +244,12 @@ def file_upload(request):
 
         print(userid, cutid, submitdate, filename)
 
-        cursor.execute(REGISTER_NEW_ANALYSIS % (userid, cutid, submitdate, file_path))
+        cursor.execute(REGISTER_NEW_ANALYSIS % (userid, cutid, "\'" + submitdate + "\'", "\'" + file_path + "\'"))
         print(request.FILES.get('file'))
         return JsonResponse({'success': True, 'message': 'Analysis result submitted!'})
 
-'''
+@csrf_exempt
+def get_results(request):
+    print(os.getcwd())
+    return JsonResponse({'success': True, 'message': os.getcwd()})
 
-def user(request):
-    id = 10
-    cursor.execute(AUTHENTICATED_USER % id)
-    data = cursor.fetchone()
-    return JsonResponse(data, safe=False)
-
-def user_roles(request):
-    id = 10
-    cursor.execute(USER_AVAILABLE_ROLES % id)
-    data = cursor.fetchone()[0]
-    return JsonResponse(data, safe=False)
-
-def user_list(request):
-    cursor.execute(USER_LIST)
-    data = cursor.fetchall()
-    data = data[0][0]
-    return JsonResponse(data, safe=False)
-
-'''
