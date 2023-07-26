@@ -69,6 +69,12 @@ function MainDashboard() {
 
 }
 
+const handleGetResults = () => {
+  const isLogged = true
+  navigate('/get_results', {state : {isLogged, selectedRole, authUser}})
+
+}
+
   return (
     <Container className='dash'>
 
@@ -88,7 +94,14 @@ function MainDashboard() {
       </div>
       </Col>
       <Col>
+
+      <Row>
       <Button className='button m-2' onClick={handleSamplesAndCuts}>Samples and cuts</Button>
+      </Row>
+
+      <Row>
+      <Button className='button m-2' onClick={handleGetResults}>Results</Button>
+      </Row>
       </Col>
       <Col>
 

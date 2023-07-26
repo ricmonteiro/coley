@@ -20,6 +20,7 @@ USER_LIST = "SELECT user_list()"
 AUTHENTICATED_USER = "SELECT to_json(u) FROM authenticated_user(%d) u"
 USER_AVAILABLE_ROLES = "SELECT user_available_roles(%d)"
 
+
 # Sample PL/pgSQL functions
 TISSUES_AVAILABLE = "SELECT to_json(t) FROM tissuetype t"
 TUMORS_AVAILABLE = "SELECT to_json(tu) FROM tumortype tu"
@@ -31,6 +32,12 @@ SAMPLES_AVAILABLE = "SELECT to_json(s) FROM sample s"
 ALL_CUTS = "SELECT to_json(ct) FROM cut ct"
 CUTS_FROM_SAMPLE = "SELECT get_all_cuts_from_sample(%d)"
 ALL_ANALYSIS = "SELECT * from analysis"
+
+#  Get analysis by sample
+RESULTS_FOR_SAMPLE = "SELECT cut.id, result_xlsx_path FROM cut INNER JOIN analysis ON analysis.cut_id = cut.id WHERE sample_id = (%d);"
+
+#  Get analysis by user
+RESULTS_FOR_USER = "SELECT * FROM analysis WHERE user_id = (%d);"
 
 # Patient PL/pgSQL functions
 PATIENT_LIST = "SELECT to_json(p) FROM patients p"
@@ -248,14 +255,15 @@ def file_upload(request):
         print(request.FILES.get('file'))
         return JsonResponse({'success': True, 'message': 'Analysis result submitted!'})
 
+
 @csrf_exempt
 def get_results(request):
     print(os.getcwd())
     return JsonResponse({'success': True, 'message': os.getcwd()})
+
 
 def get_analysis(request):
     if request.method == 'GET':
         cursor.execute(ALL_ANALYSIS)
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Analysis retrived successfully!', 'data': data})
-
