@@ -34,13 +34,13 @@ CUTS_FROM_SAMPLE = "SELECT get_all_cuts_from_sample(%d)"
 ALL_ANALYSIS = "SELECT * from analysis"
 
 #  Get analysis by sample
-RESULTS_FOR_SAMPLE = "SELECT cut.id, result_xlsx_path FROM cut INNER JOIN analysis ON analysis.cut_id = cut.id WHERE sample_id = (%d);"
+RESULTS_FOR_SAMPLE = "SELECT result_xlsx_path FROM cut INNER JOIN analysis ON analysis.cut_id = cut.id WHERE sample_id = (%d);"
 
 #  Get analysis by user
 RESULTS_FOR_USER = "SELECT * FROM analysis WHERE user_id = (%d);"
 
-# Patient PL/pgSQL functions
-PATIENT_LIST = "SELECT to_json(p) FROM patients p"
+#  Patient PL/pgSQL functions
+PATIENT_LIST = "SELECT to_json(p) FROM patients p;"
 
 ## PL/pgSQL procedures
 REGISTER_NEW_SAMPLE = "CALL register_new_sample(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -49,7 +49,7 @@ REGISTER_NEW_USER = "CALL create_new_user(%s,%s,%s,%s,%s,%s)"
 REGISTER_NEW_PATIENT = "CALL create_new_patient(%s, %s, %s)"
 REGISTER_NEW_ANALYSIS = "CALL register_new_analysis(%s, %s, %s, %s)"
 
-# auxiliary functions
+# Auxiliary functions
 def create_media_directory():
     media_dir = os.path.join(os.getcwd(), 'media')
 
@@ -256,6 +256,23 @@ def file_upload(request):
         return JsonResponse({'success': True, 'message': 'Analysis result submitted!'})
 
 
+def get_results_filter(request):
+    if request.method == 'GET':
+        print(request.body)
+        filter_type = request.body.filter
+        
+        if filter_type == "User":
+            cursor.execute(RESULTS_FOR_USER % user_id)
+            data = cursor.fetchall()
+            
+        elif filter_type == "Sample":
+            cursor.execute(RESULTS_FOR_SAMPLE % sample_id)
+            data = cursor.fetchall()
+
+
+    return JsonResponse({'success':True, 'message': 'Results retrieved successfully', 'data': data})
+
+
 @csrf_exempt
 def get_results(request):
     print(os.getcwd())
@@ -267,3 +284,5 @@ def get_analysis(request):
         cursor.execute(ALL_ANALYSIS)
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Analysis retrived successfully!', 'data': data})
+
+

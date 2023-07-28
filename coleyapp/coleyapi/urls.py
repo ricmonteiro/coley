@@ -21,6 +21,7 @@ urlpatterns = [
     path('samples/', views.samples, name='get-samples'),
     path('cuts/', views.cuts, name='get-cuts'),
     path('cuts_from_sample/', views.get_cuts_from_sample, name='get-cuts-from-sample'),
-    path('result_file_upload/', views.file_upload, name='file-upload')
+    path('result_file_upload/', views.file_upload, name='file-upload'),
+    path('get_results_filter/', views.get_results_filter, name='get-results-filter')
 
 ]
