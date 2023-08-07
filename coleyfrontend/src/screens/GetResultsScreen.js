@@ -3,14 +3,17 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Row, Col, Form, FormGroup} from "react-bootstrap";
+import { Row, Col, Form, FormGroup, Modal} from "react-bootstrap";
 
 function GetResults() {
-    const [results, setResults] = useState([])
-    const [selectedFilter, setSelectedFilter] = useState([])
+    const [selectedFilter, setSelectedFilter] = useState('')
     const [error, setError] = useState('')
     const location = useLocation();
     const navigate = useNavigate();
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const isLogged = location.state && location.state.isLogged;
     const authUser = location.state && location.state.authUser;
@@ -24,32 +27,17 @@ function GetResults() {
 
     
     const handleFilterSelection = (event) => {
-           setSelectedFilter(event.target.value);    
+           setSelectedFilter(event.target.value); 
+           console.log(selectedFilter)   
     };
     
-    const handleGetResults = () => {
-
-    axios.get("/get_results_filter/")
-    .then((response) => {
-      setResults(response.data[0]);}
-    )
-    .catch((error) => {
-      console.error(error);
-      setError("An error occurred while retrieving the result files");
-    });
-  }
-
-
     const handleSubmit = (event) => {
-
-        axios.post()
-
+        console.log(selectedFilter)
     }
 
 
     const handleCancel = (event) => {
         console.log(isLogged)
-  
         navigate('/dashboard', { state : { isLogged, selectedRole, authUser }})
       }
 
@@ -58,38 +46,60 @@ function GetResults() {
 
   return (
     <Form onSubmit={handleSubmit}>
-
-
-        <h2>Get results by user or sample</h2><h1> 
-        
-        
+        <h2>Get results by user or sample</h2><h1>         
         
         </h1>
 
         <h3>Filter by:</h3>
         <FormGroup>
+
         {["User", "Sample"].map((filter) => (
             
-        <div inline>  
+        <div key={filter} >  
 
-            <Form.Label inline htmlFor={filter}>    
+            <Form.Label key={filter} htmlFor={filter}>    
           {filter}</Form.Label>
         
-
-          <Form.Check
-            inline
-            type="radio"
-            name="role"
-            value={filter}
-            checked={setSelectedFilter === filter}
-            onChange={handleFilterSelection} />   
+          <Col>
+            <Form.Check
+              key={filter}
+              className="role-selection-option label"
+              type="radio"
+              id={filter}
+              name="filter"
+              value={filter}
+              checked={selectedFilter === filter}
+              onChange={handleFilterSelection} />   
+          </Col>
 
         </div>  
         
           
       ))}</FormGroup>
-        <Button className='button m-2' style={{ backgroundColor: "blue" }} type="submit">Get results</Button>
+        <Button className='button m-2' style={{ backgroundColor: "blue" }} disabled={!selectedFilter} onClick={handleShow}>Get results</Button>
         <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
+
+        
+      <Modal show={show} onHide={handleClose}>
+        <Col>
+        <Modal.Header closeButton>
+          <Modal.Title>Filter by {selectedFilter}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Select {selectedFilter}:</Modal.Body>
+        </Col>
+        <Col>
+        <Modal.Footer>
+         
+          <Button variant="primary" onClick={handleClose}>
+            Get results
+          </Button>
+
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+        </Col>
+      </Modal>
 
 
 

@@ -264,7 +264,7 @@ def get_results_filter(request):
         if filter_type == "User":
             cursor.execute(RESULTS_FOR_USER % user_id)
             data = cursor.fetchall()
-            
+
         elif filter_type == "Sample":
             cursor.execute(RESULTS_FOR_SAMPLE % sample_id)
             data = cursor.fetchall()

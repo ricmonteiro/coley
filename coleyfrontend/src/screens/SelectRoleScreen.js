@@ -85,7 +85,8 @@ function SelectRoles() {
 
           
         <Col>
-          <Form.Check className="role-selection-option label"
+          <Form.Check 
+            className="role-selection-option label"
             type="radio"
             id={role.role}
             name="role"
