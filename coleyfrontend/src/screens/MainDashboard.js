@@ -90,7 +90,7 @@ const handleGetResults = () => {
       {/*selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewCut}>New cut</Button>*/}
       {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewAnalysis}>New analysis</Button>}
       {/*selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>Upload result</Button>*/}
-      {selectedRole === 'Admin' && <h5>Admin functions <p><Button className='button m-2' onClick={handleCreateNewUser}>Create new user</Button></p></h5>}
+      {selectedRole === 'Admin' && <h5>Admin functions <p><Button className='admin-button m-2' onClick={handleCreateNewUser}>Create new user</Button></p></h5>}
       </div>
       </Col>
       <Col>

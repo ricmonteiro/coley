@@ -274,6 +274,12 @@ def get_results_filter(request):
 
 
 @csrf_exempt
+def get_users(request):
+    cursor.execute(USER_LIST)
+    data = cursor.fetchall()
+    return JsonResponse({'success': True, 'message': 'Users retrieved successfully', 'data':data})
+
+@csrf_exempt
 def get_results(request):
     print(os.getcwd())
     return JsonResponse({'success': True, 'message': os.getcwd()})
@@ -283,6 +289,4 @@ def get_analysis(request):
     if request.method == 'GET':
         cursor.execute(ALL_ANALYSIS)
         data = cursor.fetchall()
-    return JsonResponse({'success': True, 'message': 'Analysis retrived successfully!', 'data': data})
-
-
+    return JsonResponse({'success': True, 'message': 'Analysis retrieved successfully!', 'data': data})

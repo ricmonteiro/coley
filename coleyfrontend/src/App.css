@@ -88,6 +88,18 @@ button {
   cursor: pointer;
 }
 
+admin-button {
+  padding: 0.5rem;
+  width: 200px;
+  margin: 0.5rem;
+  display: inline-block;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: lightcyan;
+  cursor: pointer;
+  color: lightcyan;
+}
+
 .role-selection-container {
   display: flex;
   flex-direction: column;

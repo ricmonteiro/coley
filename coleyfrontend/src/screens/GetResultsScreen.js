@@ -1,9 +1,9 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button';
-import axios from 'axios';
+import axios, { AxiosHeaders } from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Row, Col, Form, FormGroup, Modal} from "react-bootstrap";
+import { Row, Col, Form, FormGroup, Modal, Table} from "react-bootstrap";
 
 function GetResults() {
     const [selectedFilter, setSelectedFilter] = useState('')
@@ -11,9 +11,32 @@ function GetResults() {
     const location = useLocation();
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
+    const [showResults, setShowResults] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [ users, setUsers] = useState([])
+
+    const handleClose = () => {
+      setShow(false);
+      setShowResults(false);
+    }
+
+
+    const handleShow = () => {
+      setShow(true);
+
+
+      {/* Get user list. If user is admin/supervisor, get all users. If not, get only the user itself*/}
+      axios.get('get_users/')
+      .then((response) => {
+        console.log(response.data)}
+      )
+      .catch((error) => {
+        console.error(error);
+        setError("An error occurred while retrieving the users");
+      });
+    
+    }
+      
 
     const isLogged = location.state && location.state.isLogged;
     const authUser = location.state && location.state.authUser;
@@ -37,9 +60,16 @@ function GetResults() {
 
 
     const handleCancel = (event) => {
-        console.log(isLogged)
         navigate('/dashboard', { state : { isLogged, selectedRole, authUser }})
       }
+
+    const handleGetResults = (event) => {
+      console.log('Results exposed!')
+      setShowResults(true)
+    }
+
+
+
 
 
 
@@ -80,6 +110,10 @@ function GetResults() {
         <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
 
         
+
+
+        {/*MODAL WITH FILTER AND RESULT LIST FOR DOWNLOAD*/}
+
       <Modal show={show} onHide={handleClose}>
         <Col>
         <Modal.Header closeButton>
@@ -87,23 +121,51 @@ function GetResults() {
         </Modal.Header>
         <Modal.Body>Select {selectedFilter}:</Modal.Body>
         </Col>
+        {users.map((user) => (
+        
+        <Row>{user}</Row> ))}
+        
         <Col>
         <Modal.Footer>
          
-          <Button variant="primary" onClick={handleClose}>
+        <Button variant="primary" onClick={handleGetResults}>
             Get results
-          </Button>
+        </Button>
 
-          <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleClose}>
             Close
-          </Button>
+        </Button>
         </Modal.Footer>
         </Col>
+        <Col>
+        <Table show={showResults == false}>
+        <thead>
+        <tr>
+          <th>Result file list</th>
+          <th>ID</th>
+          <th>Tumor</th>
+          <th>Tissue</th>
+          <th>Purpose</th>
+          <th>User</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+
+          <td>#</td>
+          <td>1</td>
+          <td>Lung</td>
+          <td>Brachiocephalic vein</td>
+          <td>TNF-alfa</td>
+          <td>Markus</td>
+          <td><a href="">&#x21E9;</a></td>
+          
+        </tr>
+        </tbody>
+      </Table>
+        </Col>
       </Modal>
-
-
-
-        
+       
     </Form>
   )
 }
