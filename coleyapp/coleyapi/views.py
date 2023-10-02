@@ -269,7 +269,6 @@ def get_results_filter(request):
             cursor.execute(RESULTS_FOR_SAMPLE % sample_id)
             data = cursor.fetchall()
 
-
     return JsonResponse({'success':True, 'message': 'Results retrieved successfully', 'data': data})
 
 
@@ -278,6 +277,7 @@ def get_users(request):
     cursor.execute(USER_LIST)
     data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Users retrieved successfully', 'data':data})
+
 
 @csrf_exempt
 def get_results(request):
