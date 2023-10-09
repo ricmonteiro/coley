@@ -1,9 +1,8 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'
-import { useEffect } from 'react'
-import { Button, Row, Col, Container } from 'react-bootstrap'
-
+import { useEffect, useState } from 'react'
+import { Button, Row, Col, Container, Form, FormGroup, Modal, Table } from 'react-bootstrap'
 
 
 function MainDashboard() {
@@ -12,6 +11,10 @@ function MainDashboard() {
   const isLogged = location.state && location.state.isLogged;
   const authUser = location.state && location.state.authUser;
   const navigate = useNavigate();
+  const [showResultsModal, setShowResultsModal] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [ users, setUsers ] = useState([])
+
 
   useEffect(() => {
     console.log(authUser)
@@ -36,13 +39,11 @@ function MainDashboard() {
   const handleCreateNewUser = () => {
     const isLogged = true
     navigate('/new_user', { state: { isLogged, selectedRole } });
-  
     }
 
   const handleRegisterNewSample = () => {
       const isLogged = true
-      navigate('/new_sample', { state: { isLogged, selectedRole, authUser } });
-    
+      navigate('/new_sample', { state: { isLogged, selectedRole, authUser } });    
       }
       
   /*const handleRegisterNewCut = () => {
@@ -69,11 +70,15 @@ function MainDashboard() {
 
 }
 
-const handleGetResults = () => {
-  const isLogged = true
-  navigate('/get_results', {state : {isLogged, selectedRole, authUser}})
+  const handleGetResults = () => {
+    const isLogged = true
+    setShowResultsModal(true)
 
 }
+
+  const handleCloseResultsModal = () => {
+    setShowResultsModal(false)
+  }
 
   return (
     <Container className='dash'>
@@ -109,7 +114,63 @@ const handleGetResults = () => {
       </Col>
       </Row>
       <Button className='role-selection-buttons button m-2' style={{ backgroundColor: "black" }} onClick={handleLogout}>Logout</Button>
+    
+        {/*MODAL WITH FILTER AND RESULT LIST FOR DOWNLOAD*/}
+
+
+        <Modal show={showResultsModal} onHide={handleCloseResultsModal}>
+        <Col>
+        <Modal.Header closeButton>
+          <Modal.Title>Choose the result file to download</Modal.Title>
+        </Modal.Header>
+              </Col>
+        {users.map((user) => (
+        
+        <Row>{user}</Row> ))}
+
+<Col>
+        <Table show={showResults === false}>
+        <thead>
+        <tr>
+
+          <th>Result file list</th>
+          <th>ID</th>
+          <th>Tumor</th>
+          <th>Tissue</th>
+          <th>Purpose</th>
+          <th>User</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+
+          <td>#</td>
+          <td>1</td>
+          <td>Lung</td>
+          <td>Brachiocephalic vein</td>
+          <td>TNF-alfa</td>
+          <td>Markus</td>
+          <td><a href="">&#x21E9;</a></td>
+          
+        </tr>
+        </tbody>
+      </Table>
+        </Col>
+        
+        <Col>
+        <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseResultsModal}>
+            Close
+        </Button>
+        </Modal.Footer>
+        </Col>
+        
+      </Modal>
+    
     </Container>
+
+    
   );
 };
 

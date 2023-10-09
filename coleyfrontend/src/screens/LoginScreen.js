@@ -36,13 +36,15 @@ function Login() {
 
 
   return (
-    <div className="login-form">
-      <h1 className="m-5" >coley</h1> 
+    <div className="login-form" style={{backgroundImage:"url(/bggif.gif)", backgroundRepeat:"no-repeat", backgroundSize:"400px 600px"}}>
+      <div >
+        <h1 className="m-5" >coley</h1> 
+      </div>
 
-      <h3>login</h3>
+      <h3 >login</h3>
 
-      <Form className="p-2" onSubmit={handleSubmit}>
-        <div className="p-2">
+      <Form  className="p-2" onSubmit={handleSubmit}>
+        <div className="p-2" >
           <Form.Label htmlFor="username">Username: </Form.Label>
           <Form.Control
             type="text"
@@ -55,7 +57,6 @@ function Login() {
         <div className="p-2">
           <Form.Label htmlFor="password">Password: </Form.Label>
           <Form.Control
-            
             type="password"
             id="password"
             value={password}

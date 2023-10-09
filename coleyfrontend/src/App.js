@@ -16,7 +16,7 @@ import GetResults from './screens/GetResultsScreen';
 
 function App() {
   return (
-    <div style={{backgroundImage:"url(/bggif.gif)", backgroundPosition:"50% -4%", backgroundRepeat:"no-repeat", backgroundSize:"1100px 600px"}}>
+    <div>
       <Routes>
 
         <Route path="/" element={<LoginScreen />} />

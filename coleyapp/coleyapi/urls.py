@@ -23,6 +23,7 @@ urlpatterns = [
     path('cuts_from_sample/', views.get_cuts_from_sample, name='get-cuts-from-sample'),
     path('result_file_upload/', views.file_upload, name='file-upload'),
     path('get_results_filter/', views.get_results_filter, name='get-results-filter'),
+    path('get_analysis/', views.get_analysis, name='get-analysis'),
     path('get_users/', views.get_users, name='get-users')
 
 ]

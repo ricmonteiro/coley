@@ -1,9 +1,9 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button';
-import axios, { AxiosHeaders } from 'axios';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Row, Col, Form, FormGroup, Modal, Table} from "react-bootstrap";
+import { Row, Col, Form, FormGroup, Modal, Table } from "react-bootstrap";
 
 function GetResults() {
     const [selectedFilter, setSelectedFilter] = useState('')
@@ -15,6 +15,10 @@ function GetResults() {
 
     const [ users, setUsers] = useState([])
 
+    const isLogged = location.state && location.state.isLogged;
+    const authUser = location.state && location.state.authUser;
+    const selectedRole = location.state && location.state.selectedRole;
+
     const handleClose = () => {
       setShow(false);
       setShowResults(false);
@@ -24,8 +28,7 @@ function GetResults() {
     const handleShow = () => {
       setShow(true);
 
-
-      {/* Get user list. If user is admin/supervisor, get all users. If not, get only the user itself*/}
+      /* Get user list. If user is admin/supervisor, get all users. If not, get only the user itself*/
       axios.get('get_users/')
       .then((response) => {
         console.log(response.data)}
@@ -35,19 +38,11 @@ function GetResults() {
         setError("An error occurred while retrieving the users");
       });
     
-    }
-      
-
-    const isLogged = location.state && location.state.isLogged;
-    const authUser = location.state && location.state.authUser;
-    const selectedRole = location.state && location.state.selectedRole;
-
+    }   
 
     useEffect(() => {
         if(!isLogged){
           navigate('/')}});
-
-
     
     const handleFilterSelection = (event) => {
            setSelectedFilter(event.target.value); 
@@ -58,21 +53,24 @@ function GetResults() {
         console.log(selectedFilter)
     }
 
-
     const handleCancel = (event) => {
         navigate('/dashboard', { state : { isLogged, selectedRole, authUser }})
       }
 
     const handleGetResults = (event) => {
+      
+      axios.get('get_analysis/')
+      .then((response) => {
+        console.log(response.data)}
+      )
+      .catch((error) => {
+        console.error(error);
+        setError("An error occurred while retrieving the files");
+      });
+
       console.log('Results exposed!')
       setShowResults(true)
     }
-
-
-
-
-
-
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -108,9 +106,7 @@ function GetResults() {
       ))}</FormGroup>
         <Button className='button m-2' style={{ backgroundColor: "blue" }} disabled={!selectedFilter} onClick={handleShow}>Get results</Button>
         <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
-
-        
-
+    
 
         {/*MODAL WITH FILTER AND RESULT LIST FOR DOWNLOAD*/}
 
@@ -138,15 +134,17 @@ function GetResults() {
         </Modal.Footer>
         </Col>
         <Col>
-        <Table show={showResults == false}>
+        <Table show={showResults === false}>
         <thead>
         <tr>
+
           <th>Result file list</th>
           <th>ID</th>
           <th>Tumor</th>
           <th>Tissue</th>
           <th>Purpose</th>
           <th>User</th>
+
         </tr>
         </thead>
         <tbody>
