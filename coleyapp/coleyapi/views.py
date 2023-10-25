@@ -231,6 +231,7 @@ def get_cuts_from_sample(request):
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Cuts from a given sample retrieved!', 'data': data[0]})
 
+
 @csrf_exempt
 def file_upload(request):
     if request.method == 'POST' and request.FILES['file']:
@@ -271,11 +272,13 @@ def get_results_filter(request):
 
     return JsonResponse({'success':True, 'message': 'Results retrieved successfully', 'data': data})
 
+
 @csrf_exempt
 def get_users(request):
     cursor.execute(USER_LIST)
     data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Users retrieved successfully', 'data':data})
+
 
 @csrf_exempt
 def get_analysis(request):

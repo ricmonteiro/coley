@@ -83,7 +83,9 @@ const navigate = useNavigate();
   }
 
   return (
+
     <Form onSubmit={handleSubmit}>
+
         <h1>Upload an analysis</h1>
         <Form.Label>Select cut to upload an analysis
         <Form.Select
@@ -104,18 +106,15 @@ const navigate = useNavigate();
         name="file"
         onChange={handleChangeFile}/>
 
-
     <Form.Label>Select date</Form.Label>
         <Form.Control type="date" value={selectedDate} name="entry-date" placeholder="Date of Birth" onChange={handleChangeDate} />  
-
-    
+      
         <Form.Label>
     {(successMessage && <Alert variant='success'>{successMessage}</Alert>) || (submitError && <Alert variant='danger'>{submitError}</Alert>)}
         </Form.Label>
         <Button  className='button m-2' type="submit">Upload analysis result</Button>
         <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
     </Form>
-
 
   )
 }

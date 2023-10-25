@@ -14,6 +14,10 @@ function MainDashboard() {
   const [showResultsModal, setShowResultsModal] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [ users, setUsers ] = useState([])
+  const [error, setError] = useState('')
+  const [ analysis, setAnalysis ] = useState([])
+
+
 
 
   useEffect(() => {
@@ -72,6 +76,15 @@ function MainDashboard() {
 
   const handleGetResults = () => {
     const isLogged = true
+    axios.get('get_analysis/')
+      .then((response) => {
+        console.log(response.data.data)
+        setAnalysis(response.data.data)}
+      )
+      .catch((error) => {
+        console.error(error);
+        setError("An error occurred while retrieving the analysis files");
+      });
     setShowResultsModal(true)
 
 }
@@ -116,9 +129,8 @@ function MainDashboard() {
       <Button className='role-selection-buttons button m-2' style={{ backgroundColor: "black" }} onClick={handleLogout}>Logout</Button>
     
         {/*MODAL WITH FILTER AND RESULT LIST FOR DOWNLOAD*/}
-
-
         <Modal show={showResultsModal} onHide={handleCloseResultsModal}>
+        <h3>Filter by:</h3>
         <Col>
         <Modal.Header closeButton>
           <Modal.Title>Choose the result file to download</Modal.Title>
@@ -128,34 +140,37 @@ function MainDashboard() {
         
         <Row>{user}</Row> ))}
 
-<Col>
-        <Table show={showResults === false}>
-        <thead>
-        <tr>
+        <Col>
+        
+          <Table show={showResults === false}>
+          <thead>
+          <tr>
+            <th>File ID</th>
+            <th>Uploaded by</th>
+            <th>Cut</th>
+            <th>Upload date</th>
+            <th>Download</th>
 
-          <th>Result file list</th>
-          <th>ID</th>
-          <th>Tumor</th>
-          <th>Tissue</th>
-          <th>Purpose</th>
-          <th>User</th>
-
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-
-          <td>#</td>
-          <td>1</td>
-          <td>Lung</td>
-          <td>Brachiocephalic vein</td>
-          <td>TNF-alfa</td>
-          <td>Markus</td>
-          <td><a href="">&#x21E9;</a></td>
+          </tr>
+          </thead>
           
-        </tr>
-        </tbody>
-      </Table>
+          {analysis.map((file) => (  
+            <tr>        
+  
+            <td>{file[0]}</td>
+            <td>{file[1]}</td>
+            <td>{file[2]}</td>
+            <td>{file[4]}</td>
+            <td><a href="">&#x21E9;</a></td>
+  
+            </tr> ))}
+          
+          
+          
+          </Table>
+
+            
+        
         </Col>
         
         <Col>

@@ -14,6 +14,7 @@ function GetResults() {
     const [showResults, setShowResults] = useState(false);
 
     const [ users, setUsers] = useState([])
+    const [ analysis, setAnalysis ] = useState([])
 
     const isLogged = location.state && location.state.isLogged;
     const authUser = location.state && location.state.authUser;
@@ -29,13 +30,13 @@ function GetResults() {
       setShow(true);
 
       /* Get user list. If user is admin/supervisor, get all users. If not, get only the user itself*/
-      axios.get('get_users/')
+      axios.get('get_analysis/')
       .then((response) => {
         console.log(response.data)}
       )
       .catch((error) => {
         console.error(error);
-        setError("An error occurred while retrieving the users");
+        setError("An error occurred while retrieving the files");
       });
     
     }   
@@ -58,16 +59,6 @@ function GetResults() {
       }
 
     const handleGetResults = (event) => {
-      
-      axios.get('get_analysis/')
-      .then((response) => {
-        console.log(response.data)}
-      )
-      .catch((error) => {
-        console.error(error);
-        setError("An error occurred while retrieving the files");
-      });
-
       console.log('Results exposed!')
       setShowResults(true)
     }
