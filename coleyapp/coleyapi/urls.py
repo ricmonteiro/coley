@@ -24,6 +24,7 @@ urlpatterns = [
     path('result_file_upload/', views.file_upload, name='file-upload'),
     path('get_results_filter/', views.get_results_filter, name='get-results-filter'),
     path('get_analysis/', views.get_analysis, name='get-analysis'),
-    path('get_users/', views.get_users, name='get-users')
+    path('get_users/', views.get_users, name='get-users'),
+    path('download_file/', views.download_file, name='download-file'),
 
 ]

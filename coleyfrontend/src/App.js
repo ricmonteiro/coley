@@ -11,7 +11,6 @@ import CreateAnalysis from './screens/CreateAnalysisScreen';
 import { Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SamplesAndCuts from './screens/SamplesAndCutsScreen';
-import GetResults from './screens/GetResultsScreen';
 
 
 function App() {
@@ -27,7 +26,6 @@ function App() {
         <Route path="/new_patient" element={<CreatePatient/>} />
         <Route path="/new_analysis" element={<CreateAnalysis/>} />
         <Route path="/samples_and_cuts" element={<SamplesAndCuts/>} />
-        <Route path="/get_results" element={<GetResults/>} />
 
       </Routes>
     </div>

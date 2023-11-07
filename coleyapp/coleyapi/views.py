@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db import connection
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, FileResponse
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json, operator
 import time
 import os
+import re
 from django.conf import settings
 
 # connect to db
@@ -286,3 +287,23 @@ def get_analysis(request):
         cursor.execute(ALL_ANALYSIS)
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Analysis retrieved successfully!', 'data': data})
+
+
+@csrf_exempt
+def download_file(request):
+    data = str(json.loads(request.body.decode('utf-8'))['filename'])
+
+    print(data)
+
+
+    if os.path.exists(data) and data.endswith('.xlsx'):
+        print(data + ' 2')
+        with open(data, 'rb') as excel_file:
+            
+            response = FileResponse(excel_file, as_attachment=True)
+            print(os.path.basename(data))
+            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(data)}"'
+            return response
+    else:
+        print('failed')
+        return HttpResponse('File not found', status=404)

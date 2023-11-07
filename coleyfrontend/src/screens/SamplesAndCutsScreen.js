@@ -42,7 +42,6 @@ function SamplesAndCuts() {
 
       <Button className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
       </Container>
-
       
   )
 }
