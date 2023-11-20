@@ -86,7 +86,7 @@ const navigate = useNavigate();
 
     <Form onSubmit={handleSubmit}>
 
-        <h1>Upload an analysis</h1>
+        <h1>Upload a Result</h1>
         <Form.Label>Select cut to upload an analysis
         <Form.Select
         value={selectedCut}
@@ -112,7 +112,7 @@ const navigate = useNavigate();
         <Form.Label>
     {(successMessage && <Alert variant='success'>{successMessage}</Alert>) || (submitError && <Alert variant='danger'>{submitError}</Alert>)}
         </Form.Label>
-        <Button  className='button m-2' type="submit">Upload analysis result</Button>
+        <Button  className='button m-2' type="submit">Upload result file</Button>
         <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
     </Form>
 

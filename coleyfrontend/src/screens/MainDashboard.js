@@ -54,11 +54,11 @@ function MainDashboard() {
     navigate('/new_sample', { state: { isLogged, selectedRole, authUser } });
   }
 
-  /*const handleRegisterNewCut = () => {
+  const handleRegisterNewCut = () => {
         const isLogged = true
         navigate('/new_cut', { state: { isLogged, selectedRole, authUser } });
       
-        }*/
+        }
 
   const handleRegisterNewPatient = () => {
     const isLogged = true
@@ -120,17 +120,13 @@ function MainDashboard() {
           <div className='dash'>
             {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewPatient}>New patient</Button>}
             {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>New sample</Button>}
-            {/*selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewCut}>New cut</Button>*/}
+            {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewCut}>New cut</Button>}
             {selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewAnalysis}>New analysis</Button>}
             {/*selectedRole !== 'Student' && <Button className='button m-2' onClick={handleRegisterNewSample}>Upload result</Button>*/}
             {selectedRole === 'Admin' && <h5>Admin functions <p><Button className='admin-button m-2' onClick={handleCreateNewUser}>Create new user</Button></p></h5>}
           </div>
         </Col>
         <Col>
-
-          <Row>
-            <Button className='button m-2' onClick={handleSamplesAndCuts}>Samples and cuts</Button>
-          </Row>
 
           <Row>
             <Button className='button m-2' onClick={handleGetResults}>Results</Button>
@@ -145,7 +141,7 @@ function MainDashboard() {
 
       {/*MODAL WITH FILTER AND RESULT LIST FOR DOWNLOAD*/}
       <Modal show={showResultsModal} onHide={handleCloseResultsModal}>
-        <h3>Filter by:</h3>
+        
         <Col>
           <Modal.Header closeButton>
             <Modal.Title>Choose the result file to download</Modal.Title>

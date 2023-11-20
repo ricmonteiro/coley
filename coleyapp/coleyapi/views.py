@@ -50,6 +50,7 @@ REGISTER_NEW_USER = "CALL create_new_user(%s,%s,%s,%s,%s,%s)"
 REGISTER_NEW_PATIENT = "CALL create_new_patient(%s, %s, %s)"
 REGISTER_NEW_ANALYSIS = "CALL register_new_analysis(%s, %s, %s, %s)"
 
+
 # Auxiliary functions
 def create_media_directory():
     media_dir = os.path.join(os.getcwd(), 'media')
@@ -164,9 +165,34 @@ def create_sample_view(request):
         # user_id, origin, patient_id, tumor_type_id, tissue_type_id, entry_date, temperature_id, container_id, "location" #
         cursor.execute(REGISTER_NEW_SAMPLE, (userid, origin, patient, tumor, tissue, temperature, container, None, date_creation))
         return JsonResponse({'success': True, 'message' :'Sample created!'})
+    else:
+        return JsonResponse({'success': False, 'message': 'There was a problem registering the sample.'})
 
-        #return JsonResponse({'success': False, 'message' :'Registering failed...'})
+
+# Create cut view
+@csrf_exempt
+def create_cut(request):
+    if request.method == 'POST':
+        userid = int(json.loads(request.body.decode('utf-8'))['user'])
+        purpose = str(json.loads(request.body.decode('utf-8'))['purpose'])
+        date_creation = str(json.loads(request.body.decode('utf-8'))['date'])
+        sample = int(json.loads(request.body.decode('utf-8'))['sample'])
+        cursor.execute(REGISTER_NEW_CUT, (userid, purpose, sample, date_creation))
+
+        return JsonResponse({'success': True, 'message': 'Cut created!'})
+    else:
+        return JsonResponse({'success': False, 'message': 'There was a problem creating the cut.'})
+
+
     
+
+
+
+        
+
+
+
+
 # Get patients view
 def get_patients(request):
     data = []

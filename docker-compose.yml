@@ -24,7 +24,7 @@ services:
       - '3000:3000'
 
     volumes:
-      - ./frontend:/app/frontend
+      - ./coleyfrontend:/app/frontend
 
     depends_on:
       - backend
@@ -43,7 +43,7 @@ services:
       - '8000:8000'
 
     volumes:
-      - ./backend:/app/backend
+      - ./coleyapp:/app/backend
 
     depends_on:
       - db
