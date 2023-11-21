@@ -135,6 +135,7 @@ def create_user_view(request):
     else:
         return JsonResponse({'sucess' : False, 'message' : 'There was a problem.'})
     
+    
 # Create patient view
 @csrf_exempt
 def create_patient_view(request):
@@ -147,6 +148,7 @@ def create_patient_view(request):
     except Exception as inst:
         return JsonResponse({'success' : False, 'message': inst})
     return JsonResponse({'success': True, 'message': 'Patient registered successfully!'})
+
 
 @csrf_exempt
 # Create sample view
@@ -182,74 +184,96 @@ def create_cut(request):
         return JsonResponse({'success': True, 'message': 'Cut created!'})
     else:
         return JsonResponse({'success': False, 'message': 'There was a problem creating the cut.'})
-
-
-    
-
-
-
-        
-
-
-
+ 
 
 # Get patients view
 def get_patients(request):
     data = []
-    while len(data) == 0:
-        time.sleep(0.5)
-        cursor.execute(PATIENT_LIST)
-        data = cursor.fetchall()
-    return JsonResponse({'success': True, 'message': 'Patients retrieved!', 'data': data})
+    if request.method == 'GET':
+        while len(data) == 0:
+            time.sleep(0.5)
+            cursor.execute(PATIENT_LIST)
+            data = cursor.fetchall()
+        return JsonResponse({'success': True, 'message': 'Patients retrieved!', 'data': data})
+    else:
+        return JsonResponse({'success': False, 'message': 'Error retrieving patients', 'data': data})
+
 
 def tissue_types(request):
     data = []
-    while len(data) == 0:
-        time.sleep(0.5)
-        cursor.execute(TISSUES_AVAILABLE)
-        data = cursor.fetchall()
-        print(data)
-    return JsonResponse({'success': True, 'message': 'Tissues retrieved!', 'data': data})
+    if request.method == 'GET':
+        while len(data) == 0:
+            time.sleep(0.5)
+            cursor.execute(TISSUES_AVAILABLE)
+            data = cursor.fetchall()
+        return JsonResponse({'success': True, 'message': 'Tissues retrieved!', 'data': data})
+    else:
+        return JsonResponse({'success': False, 'message': 'Error retrieving tissue types', 'data': data})
+
 
 def tumor_types(request):
     data = []
-    while len(data) == 0:
-        time.sleep(0.5)
-        cursor.execute(TUMORS_AVAILABLE)
-        data = cursor.fetchall()
-    return JsonResponse({'success': True, 'message': 'Tumors retrieved!', 'data': data})
+    if request.method == 'GET':
+        while len(data) == 0:
+            time.sleep(0.5)
+            cursor.execute(TUMORS_AVAILABLE)
+            data = cursor.fetchall()
+        return JsonResponse({'success': True, 'message': 'Tumors retrieved!', 'data': data})
+    
+    else:
+        return JsonResponse({'success': False, 'message': 'Error retrieving tissue types', 'data': data})
+
 
 def temperatures(request):
     data = []
-    while len(data) == 0:
-        time.sleep(0.5)
-        cursor.execute(TEMPERATURES_AVAILABLE)
-        data = cursor.fetchall()
-    return JsonResponse({'success': True, 'message': 'Temperatures retrieved!', 'data': data})
+    if request.method == 'GET':
+        while len(data) == 0:
+            time.sleep(0.5)
+            cursor.execute(TEMPERATURES_AVAILABLE)
+            data = cursor.fetchall()
+        return JsonResponse({'success': True, 'message': 'Temperatures retrieved!', 'data': data})
+    
+    else:
+        return JsonResponse({'success': False, 'message': 'Error retrieving temperatures', 'data': data})
+
 
 def containers(request):
     data = []
-    while len(data) == 0:
-        time.sleep(0.5)
-        cursor.execute(CONTAINERS_AVAILABLE)
-        data = cursor.fetchall()
-    return JsonResponse({'success': True, 'message': 'Containers retrieved!', 'data':data})
+    if request.method == 'GET':
+        while len(data) == 0:
+            time.sleep(0.5)
+            cursor.execute(CONTAINERS_AVAILABLE)
+            data = cursor.fetchall()
+        return JsonResponse({'success': True, 'message': 'Containers retrieved!', 'data':data})
+
+    else:
+        return JsonResponse({'success': False, 'message': 'Error retrieving containers', 'data': data})
+
 
 def samples(request):
     data = []
-    while len(data) == 0:
-        time.sleep(0.5)
-        cursor.execute(SAMPLES_AVAILABLE)
-        data = cursor.fetchall()
-    return JsonResponse({'success': True, 'message': 'Samples retrieved successfully', 'data': data})
+    if request.method == 'GET':
+        while len(data) == 0:
+            time.sleep(0.5)
+            cursor.execute(SAMPLES_AVAILABLE)
+            data = cursor.fetchall()
+        return JsonResponse({'success': True, 'message': 'Samples retrieved successfully', 'data': data})
+    
+    else:
+        return JsonResponse({'success': False, 'message': 'Error retrieving samples', 'data': data})
+
 
 def cuts(request):
     data = []
-    while len(data) == 0:
-        time.sleep(0.5)
-        cursor.execute(ALL_CUTS)
-        data = cursor.fetchall()
-    return JsonResponse({'success': True, 'message': 'Cuts retrieved successfully!', 'data': data})
+    if request.method == 'GET':
+        while len(data) == 0:
+            time.sleep(0.5)
+            cursor.execute(ALL_CUTS)
+            data = cursor.fetchall()
+        return JsonResponse({'success': True, 'message': 'Cuts retrieved successfully!', 'data': data})
+    else:
+        return JsonResponse({'success': False, 'message': 'Error retrieving cuts', 'data': data})
+
 
 def get_cuts_from_sample(request):
     data = []
@@ -284,7 +308,6 @@ def file_upload(request):
         print(request.FILES.get('file'))
         return JsonResponse({'success': True, 'message': 'Analysis result submitted!'})
 
-
 def get_results_filter(request):
     if request.method == 'GET':
         print(request.body)
@@ -300,13 +323,11 @@ def get_results_filter(request):
 
     return JsonResponse({'success':True, 'message': 'Results retrieved successfully', 'data': data})
 
-
 @csrf_exempt
 def get_users(request):
     cursor.execute(USER_LIST)
     data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Users retrieved successfully', 'data':data})
-
 
 @csrf_exempt
 def get_analysis(request):
@@ -315,13 +336,11 @@ def get_analysis(request):
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Analysis retrieved successfully!', 'data': data})
 
-
 @csrf_exempt
 def download_file(request):
     data = str(json.loads(request.body.decode('utf-8'))['filename'])
 
     print(data)
-
 
     if os.path.exists(data) and data.endswith('.xlsx'):
         print(data + ' 2')

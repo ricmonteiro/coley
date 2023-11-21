@@ -71,7 +71,7 @@ function CreateSample() {
   const handleSubmit = (event) => {
 
       event.preventDefault();
-      /*user_id, origin, patient_id, tumor_type_id, tissue_type_id, entry_date, temperature_id, container_id, "location"*/
+
       var formData = {
         user: selectedUser,
         origin: origin,

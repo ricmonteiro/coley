@@ -75,13 +75,15 @@ function CreatePatient() {
         <Form.Label>
           Date of birth:
           <Form.Control
-            type="text"
+            type="date"
             value={dob}
-            placeholder='yyyy/mm/dd'
+            placeholder="dd-mm-yyyy"
+            pattern="\d{2}-\d{2}-\d{4}"
             onChange={e => setDob(e.target.value)}
           />
 
         </Form.Label>
+        
 
          <Form.Label>Gender:
           <Form.Select
