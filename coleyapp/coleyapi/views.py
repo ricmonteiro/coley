@@ -95,7 +95,6 @@ def logout_view(request):
 
 
 # Role selection view    
-
 def user_roles(request):
     if request.method == 'GET':
         try:
@@ -110,7 +109,6 @@ def user_roles(request):
 
 
 # Create users view
-
 @csrf_exempt
 def create_user_view(request):
 
@@ -135,7 +133,7 @@ def create_user_view(request):
     else:
         return JsonResponse({'sucess' : False, 'message' : 'There was a problem.'})
     
-    
+
 # Create patient view
 @csrf_exempt
 def create_patient_view(request):
@@ -308,6 +306,7 @@ def file_upload(request):
         print(request.FILES.get('file'))
         return JsonResponse({'success': True, 'message': 'Analysis result submitted!'})
 
+
 def get_results_filter(request):
     if request.method == 'GET':
         print(request.body)
@@ -323,11 +322,13 @@ def get_results_filter(request):
 
     return JsonResponse({'success':True, 'message': 'Results retrieved successfully', 'data': data})
 
+
 @csrf_exempt
 def get_users(request):
     cursor.execute(USER_LIST)
     data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Users retrieved successfully', 'data':data})
+
 
 @csrf_exempt
 def get_analysis(request):
@@ -336,11 +337,10 @@ def get_analysis(request):
         data = cursor.fetchall()
     return JsonResponse({'success': True, 'message': 'Analysis retrieved successfully!', 'data': data})
 
+
 @csrf_exempt
 def download_file(request):
     data = str(json.loads(request.body.decode('utf-8'))['filename'])
-
-    print(data)
 
     if os.path.exists(data) and data.endswith('.xlsx'):
         print(data + ' 2')
