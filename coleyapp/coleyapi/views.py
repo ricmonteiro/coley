@@ -208,6 +208,7 @@ def tissue_types(request):
         time.sleep(0.5)
         cursor.execute(TISSUES_AVAILABLE)
         data = cursor.fetchall()
+        print(data)
     return JsonResponse({'success': True, 'message': 'Tissues retrieved!', 'data': data})
 
 def tumor_types(request):

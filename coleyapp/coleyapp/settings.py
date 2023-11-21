@@ -87,6 +87,7 @@ WSGI_APPLICATION = 'coleyapp.wsgi.application'
 
 DATABASES = {
     'default': {
+        
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'coleydb',
         'HOST':'localhost',
