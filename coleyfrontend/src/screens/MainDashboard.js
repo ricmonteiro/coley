@@ -22,7 +22,6 @@ function MainDashboard() {
 
 
   useEffect(() => {
-    console.log(authUser)
     if (!isLogged) {
       navigate('/')
     }
@@ -133,7 +132,7 @@ function MainDashboard() {
           </Row>
         </Col>
         <Col>
-
+              
 
         </Col>
       </Row>

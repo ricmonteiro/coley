@@ -77,7 +77,7 @@ def login_view(request):
             session = request.session
             cursor.execute(AUTHENTICATED_USER % int(session.get('_auth_user_id')))
             authenticated_user = cursor.fetchall()
-            return JsonResponse({'success': True, 'user': authenticated_user})
+            return JsonResponse({'success': True, 'message': 'User authenticated successfully', 'user': authenticated_user})
            
         else:
             return JsonResponse({'success': False, 'error': 'Invalid username or password', 'is_logged': True})

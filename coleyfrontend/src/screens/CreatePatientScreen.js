@@ -78,7 +78,6 @@ function CreatePatient() {
             type="date"
             value={dob}
             placeholder="dd-mm-yyyy"
-            pattern="\d{2}-\d{2}-\d{4}"
             onChange={e => setDob(e.target.value)}
           />
 
