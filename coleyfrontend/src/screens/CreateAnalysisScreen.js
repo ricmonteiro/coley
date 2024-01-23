@@ -15,8 +15,6 @@ const navigate = useNavigate();
   const [availableCuts, setAvailableCuts] = useState([])
   const [successMessage, setSuccessMessage] = useState('')
   const [submitError, setSubmitError] = useState('')
-  
-
 
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedCut, setSelectedCut] = useState('')

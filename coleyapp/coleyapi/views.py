@@ -47,7 +47,7 @@ PATIENT_LIST = "SELECT to_json(p) FROM patients p;"
 REGISTER_NEW_SAMPLE = "CALL register_new_sample(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 REGISTER_NEW_CUT = "CALL register_new_cut(%s, %s, %s, %s)"
 REGISTER_NEW_USER = "CALL create_new_user(%s,%s,%s,%s,%s,%s)"
-REGISTER_NEW_PATIENT = "CALL create_new_patient(%s, %s, %s)"
+REGISTER_NEW_PATIENT = "CALL register_new_patient(%s, %s, %s)"
 REGISTER_NEW_ANALYSIS = "CALL register_new_analysis(%s, %s, %s, %s)"
 
 

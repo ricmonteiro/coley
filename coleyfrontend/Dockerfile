@@ -8,5 +8,3 @@ RUN npm install
 COPY . /app/frontend/
 
 CMD ["npm", "start"]
-
-

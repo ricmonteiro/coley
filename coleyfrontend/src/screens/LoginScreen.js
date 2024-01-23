@@ -36,7 +36,7 @@ function Login() {
 
 
   return (
-    <div className="login-form" style={{backgroundImage:"url(/bggif.gif)", backgroundRepeat:"no-repeat", backgroundSize:"400px 600px"}}>
+    <div className="login-form">
       <div >
         <h1 className="m-5" >coley</h1> 
       </div>

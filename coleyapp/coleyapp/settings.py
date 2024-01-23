@@ -89,11 +89,11 @@ DATABASES = {
     'default': {
         
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'coleydb',
-        'HOST':'localhost',
+        'NAME': 'postgres',
+        'HOST':'db',
         'PORT':'5432',
         'USER':'postgres',
-        'PASSWORD':'Ric1991!'
+        'PASSWORD':'postgres'
 
     }
 }

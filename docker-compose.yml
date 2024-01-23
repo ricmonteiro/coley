@@ -3,13 +3,14 @@ version: '3.9'
 services:
   db:
     image: postgres:14-alpine
-    ports:
-      - '2345:2345'
+    
     restart: always
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
+    ports:
+      - '5432:5432'
 
     volumes:
       - ./data/db:/var/lib/postgresql/data/

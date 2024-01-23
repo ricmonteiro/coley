@@ -15,7 +15,7 @@ import SamplesAndCuts from './screens/SamplesAndCutsScreen';
 
 function App() {
   return (
-    <div>
+
       <Routes>
 
         <Route path="/" element={<LoginScreen />}/>
@@ -29,7 +29,7 @@ function App() {
         <Route path="/samples_and_cuts" element={<SamplesAndCuts/>}/>
         
       </Routes>
-    </div>
+
   )
 }
 
