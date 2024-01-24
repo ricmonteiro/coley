@@ -30,15 +30,17 @@ services:
     depends_on:
       - backend
 
+    hostname: coley 
+
   backend: 
     build: 
       context: ./coleyapp
       dockerfile: Dockerfile
 
-    environment:
-      - POSTGRES_PASSWORD=Ric1991!
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=coleydb
+    #environment:
+    #  - POSTGRES_PASSWORD=Ric1991!
+    # - POSTGRES_USER=postgres
+    #  - POSTGRES_DB=coleydb
 
     ports:
       - '8000:8000'

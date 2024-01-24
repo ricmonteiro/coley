@@ -1,5 +1,42 @@
+/* 
+	Main table creation script 
+	
+	To implement this schema in Django: 
+	1 - do the python3 manage.py inspectdb
+	2 - drop all tables from postgresql
+	3 - write the models in models.py
+	4 - make migrations and migrate in django 
+	
+*/
+
 BEGIN;
-/* create coley tables */
+
+/* User table as defined in the prebuilt user model from Django */
+
+/*
+
+CREATE TABLE "user"(
+    "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+    	CONSTRAINT user_id_unique UNIQUE,
+    "username" VARCHAR(15) NOT NULL
+    	CONSTRAINT username_unique UNIQUE,
+    "first_name" VARCHAR(255),
+    "last_name" VARCHAR(255),
+    "email" VARCHAR(255) NOT NULL
+    	CONSTRAINT email_unique UNIQUE,
+    "password" VARCHAR(127) NOT NULL,
+    "groups" INTEGER,
+    "user_permissions" INTEGER ,
+    "is_staff" BOOLEAN NOT NULL DEFAULT False,
+    "is_active" BOOLEAN NOT NULL DEFAULT True,
+    "is_superuser" BOOLEAN NOT NULL DEFAULT False,
+    "last_login" TIMESTAMP(0) WITHOUT TIME ZONE,
+    "date_joined" TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+*/
+
+
 CREATE TABLE "patients"(
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "patient_name" VARCHAR(255) NOT NULL,
@@ -67,92 +104,5 @@ CREATE TABLE "analysis"(
 
     
 
-
-
-/* insert baseline data*/
-
-    INSERT INTO auth_group (name) VALUES
-    ('Admin'),
-    ('Supervisor'),
-    ('Technician'),
-    ('Student');
-	
-   
-    INSERT INTO auth_user_groups (user_id, group_id) VALUES
-    (1,  1), -- admin as Admin, Supervisor, Technician and Student
-    (1,  2),
-    (1,  3),
-    (1,  4);
-           
-
-    INSERT INTO temperature (temperature_desc) VALUES 
-    ('-80ºC'),
-    ('4ºC'),
-    ('other');   
-    
-    INSERT INTO containers (container_name, container_description) VALUES
-    ('main freezer', '{
-    
-    "drawer 1": {
-    "box 1": {
-      "slot 1": 0,
-      "slot 2": 0,
-      "slot 3": 0,
-      "slot 4": 0,
-      "slot 5": 0,
-      "slot 6": 0
-    },
-    "box 2": {
-      "slot 1": 0,
-      "slot 2": 0,
-      "slot 3": 0,
-      "slot 4": 0,
-      "slot 5": 0,
-      "slot 6": 0
-    },
-    "box 3": {
-      "slot 1": 0,
-      "slot 2": 0,
-      "slot 3": 0,
-      "slot 4": 0,
-      "slot 5": 0,
-      "slot 6": 0
-    }
-  },
-  "drawer 2": {
-    "box 1": {
-      "slot 1": 0,
-      "slot 2": 0,
-      "slot 3": 0,
-      "slot 4": 0,
-      "slot 5": 0,
-      "slot 6": 0
-    },
-    "box 2": {
-      "slot 1": 0,
-      "slot 2": 0,
-      "slot 3": 0,
-      "slot 4": 0,
-      "slot 5": 0,
-      "slot 6": 0
-    },
-    "box 3": {
-      "slot 1": 0,
-      "slot 2": 0,
-      "slot 3": 0,
-      "slot 4": 0,
-      "slot 5": 0,
-      "slot 6": 0
-    }
-  }}');
-
-    INSERT INTO tumortype (tumor_description) VALUES
-    ('pancreatic cancer'),
-    ('liver cancer'),
-    ('bladder cancer');
-    
-    INSERT INTO tissuetype (tissue_description) VALUES
-    ('blood'),
-    ('liver'),
-    ('connective tissue'),
-    ('skin');
+ 
+COMMIT;
