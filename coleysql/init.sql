@@ -89,9 +89,9 @@ CREATE TABLE "sample"(
     ('other');   
     
     INSERT INTO containers (container_name, container_desc) VALUES
-    ('main freezer', {})
+    ('main freezer', '{
     
-    /*"drawer 1": {
+    "drawer 1": {
     "box 1": {
       "slot 1": 0, /* insert sample */
       "slot 2": 0,
@@ -142,7 +142,7 @@ CREATE TABLE "sample"(
       "slot 5": 0,
       "slot 6": 0
     }
-  }});*/
+  }}');
 
     INSERT INTO tumortype (tumor_description) VALUES
     ('pancreatic cancer'),
