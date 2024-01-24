@@ -10,15 +10,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 axios.defaults.baseURL = 'http://localhost:8000/api';
-root.render(
-    
+root.render( 
 
      <Router>
         <img src='/bggif.gif' width="50" height="60"></img>
 
     <App />
 
-        <h6 className='creator'> by Ricardo Monteiro </h6>
+        <h6 className='creator'> by Ricardo Monteiro &copy; </h6>
     </Router>
 
 );

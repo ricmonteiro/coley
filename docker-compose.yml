@@ -13,7 +13,8 @@ services:
       - '5432:5432'
 
     volumes:
-      - ./data/db:/var/lib/postgresql/data/
+      - ./data/db/:/var/lib/postgresql/data/
+      - ./coleysql/:/home/coleydata/
 
   frontend:
     build:
