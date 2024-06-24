@@ -113,6 +113,8 @@ function MainDashboard() {
       <h1>Dashboard</h1>
       {<h6>{authUser["0"]["first_name"]} {authUser["0"]["last_name"]}</h6>}
       {<h6><b>{selectedRole}</b></h6>}
+      <Button className='role-selection-buttons button m-2' style={{ backgroundColor: "black" }} onClick={handleLogout}>Logout</Button>
+
       <Row>
 
         <Col>
@@ -126,17 +128,16 @@ function MainDashboard() {
           </div>
         </Col>
         <Col>
-
           <Row>
             <Button className='button m-2' onClick={handleGetResults}>Results</Button>
           </Row>
         </Col>
-        <Col>
-              
+        
 
-        </Col>
       </Row>
-      <Button className='role-selection-buttons button m-2' style={{ backgroundColor: "black" }} onClick={handleLogout}>Logout</Button>
+      <Row>
+      </Row>
+      
 
       {/*MODAL WITH FILTER AND RESULT LIST FOR DOWNLOAD*/}
       <Modal show={showResultsModal} onHide={handleCloseResultsModal}>

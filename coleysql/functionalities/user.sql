@@ -58,8 +58,8 @@ DECLARE
 	newuserid numeric;
 BEGIN
 
-	INSERT INTO auth_user (username, first_name, last_name, email, password) /* introduced password must be hashed */
-	VALUES (username, firstname, lastname,  email, password);
+	INSERT INTO auth_user (username, first_name, last_name, email, password, is_superuser, is_active, is_staff, date_joined) /* introduced password must be hashed */
+	VALUES (username, firstname, lastname,  email, password, false, true, false, CURRENT_TIMESTAMP);
 	
 
 /* 

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from "axios";
 import { useEffect } from "react"
-import { Form, Button, Alert } from 'react-bootstrap'
+import { Form, Button, Alert, Container } from 'react-bootstrap'
 
 
 function CreatePatient() {
@@ -62,6 +62,7 @@ function CreatePatient() {
       };
 
     return (
+      <Container className='dash'>
       <Form onSubmit={handleSubmit}>
         <h2>Insert patient details</h2>
         <Form.Label>
@@ -78,8 +79,7 @@ function CreatePatient() {
             type="date"
             value={dob}
             placeholder="dd-mm-yyyy"
-            onChange={e => setDob(e.target.value)}
-          />
+            onChange={e => setDob(e.target.value)}/>
 
         </Form.Label>
         
@@ -101,6 +101,7 @@ function CreatePatient() {
         <Button  className='button m-2' type="submit">Create patient</Button>
         <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
       </Form>
+      </Container>
     );
 }
 

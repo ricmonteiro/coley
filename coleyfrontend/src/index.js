@@ -13,7 +13,7 @@ axios.defaults.baseURL = 'http://localhost:8000/api';
 root.render( 
 
      <Router>
-        <img src='/bggif.gif' width="50" height="60"></img>
+        <img src='/bggif.gif' width="100" height="100"></img>
 
     <App />
 

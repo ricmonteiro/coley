@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Form, Button, Alert } from 'react-bootstrap'
+import { Form, Button, Alert, Container } from 'react-bootstrap'
 import { useState, useEffect } from 'react';
 import axios from 'axios'
 
@@ -82,6 +82,8 @@ const navigate = useNavigate();
 
   return (
 
+    <Container className='dash'>
+
     <Form onSubmit={handleSubmit}>
 
         <h1>Upload a Result</h1>
@@ -113,6 +115,7 @@ const navigate = useNavigate();
         <Button  className='button m-2' type="submit">Upload result file</Button>
         <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
     </Form>
+    </Container>
 
   )
 }

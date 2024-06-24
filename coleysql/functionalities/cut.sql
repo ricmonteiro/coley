@@ -30,13 +30,13 @@ $$ LANGUAGE plpgsql;
  * Create new cut
  */ 
 
-CREATE OR REPLACE PROCEDURE register_new_cut(sampleid INT, userid INT, prps VARCHAR, parentcutid INT DEFAULT NULL, cutdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+CREATE OR REPLACE PROCEDURE register_new_cut(sampleid INT, userid INT, prps VARCHAR, cutdate date)
 AS
 $$
 BEGIN
 
-	INSERT INTO cut (user_id, purpose, sample_id, cut_date, parent_cut_id)
-	VALUES (userid, prps, sampleid, cutdate, parentcutid);
+	INSERT INTO cut (user_id, purpose, sample_id, cut_date)
+	VALUES (userid, prps, sampleid, cutdate);
 	
 COMMIT;
 END;

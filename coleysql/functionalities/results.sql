@@ -1,24 +1,4 @@
 /*
- * Analysis and results functionalites
- */
- 
- 
- 
- CREATE OR REPLACE FUNCTION get_all_results()
- RETURNS json
- AS
- $$
- BEGIN
- 
-
- 
- 
- END;
- $$ LANGUAGE plpgsql
- 
- 
- 
-/*
  * Get all results associated with a given sample
  */
  

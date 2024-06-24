@@ -69,7 +69,7 @@ CREATE TABLE "temperature"(
     "temperature_desc" VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE "sample"(
+CREATE REPLACE TABLE "sample"(
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "user_id" INTEGER NOT NULL REFERENCES "auth_user"("id"),
     "origin" VARCHAR(255) NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE "sample"(
     "entry_date" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "temperature_id" INTEGER NOT NULL REFERENCES "temperature"("id"),
     "container_id" SMALLINT NOT NULL REFERENCES "containers"("id"),
-    "location" JSON NOT NULL
+    "location" JSON NULL
 );
 
 
@@ -100,9 +100,7 @@ CREATE TABLE "analysis"(
     "date" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
     "result_xlsx_path" VARCHAR(255) NULL,
     "state" JSON NULL
-);
+);   
 
-    
 
- 
 COMMIT;

@@ -42,7 +42,7 @@ CREATE TABLE "sample"(
     "entry_date" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "temperature_id" INTEGER NOT NULL REFERENCES "temperature"("id"),
     "container_id" SMALLINT NOT NULL REFERENCES "containers"("id"),
-    "location" JSON NOT NULL
+    "location" JSON NULL
 );
 
 
@@ -64,9 +64,6 @@ CREATE TABLE "analysis"(
     "result_xlsx_path" VARCHAR(255) NULL,
     "state" JSON NULL
 );
-
-    
-
 
 
 /* insert baseline data*/

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap'
+import { Form, Button, Alert, Container } from 'react-bootstrap'
 import axios from 'axios'
 
 
@@ -133,6 +133,7 @@ function CreateSample() {
 
       return (
         <div>
+          <Container className='dash'>
           <Form onSubmit={handleSubmit}>
            
           <h1>Register a new sample</h1>
@@ -220,7 +221,9 @@ function CreateSample() {
           <Button  className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
           
           </Form>
+          </Container>
           </div>  
+          
       );
 }
 

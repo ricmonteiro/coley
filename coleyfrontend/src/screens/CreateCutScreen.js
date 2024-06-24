@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button, Alert } from 'react-bootstrap'
+import { Form, Button, Alert, Container } from 'react-bootstrap'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios'
@@ -93,6 +93,7 @@ function CreateCut() {
 
 
   return (
+    <Container className='dash'>
     <Form onSubmit={handleSubmit}>
 
       <h1>Create a cut from a sample</h1>
@@ -127,6 +128,7 @@ function CreateCut() {
       <Button className='button m-2' type='Submit'>Create cut</Button>
       <Button className='button m-2' style={{ backgroundColor: "black" }} onClick={handleCancel}>Back</Button>
     </Form>
+    </Container>
   )
 }
 

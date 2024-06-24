@@ -27,11 +27,8 @@ CREATE OR REPLACE FUNCTION sample_list_for_user(userid INT)
 RETURNS json
 AS 
 $$
-
 BEGIN
-
-RETURN (SELECT json_agg(json_build_object(t)) FROM sample t WHERE t.user_id = userid) 
-	
+RETURN (SELECT json_agg(json_build_object(t)) FROM sample t WHERE t.user_id = userid); 
 END;
 $$ LANGUAGE plpgsql;
 
