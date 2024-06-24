@@ -74,17 +74,18 @@ CREATE TABLE "analysis"(
     ('Technician'),
     ('Student');
 	
-   
+
+   INSERT INTO auth_user (password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined)  VALUES 							   
+    ('pbkdf2_sha256$390000$6NCUcyLFgwe6JDU2pA1mN7$44eqcoyN7nkpRnH0hD4nCAn0uZEdnqB8UmKbPko+Bgo=',null, False,'markus','Markus','Maeurer','markus.maeurer@fchampalimaud.org', True, True, CURRENT_TIMESTAMP), -- pw markuspw
+    ('pbkdf2_sha256$390000$5O94x1EvDTgWd1Rbnqsxsa$hxd5v0IV3FEmixTA//iI/O93A7FVeAxrgSHj3QgCrJY=',null, True,'ricardo','Ricardo','Monteiro','ricardo.monteiro@research.fundacaochampalimaud.pt', True, True, CURRENT_TIMESTAMP); -- pw ricardopw
+
+
     INSERT INTO auth_user_groups (user_id, group_id) VALUES
     (1,  1), -- admin as Admin, Supervisor, Technician and Student
     (1,  2),
     (1,  3),
     (1,  4);
-
-    INSERT INTO auth_user (password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined)  VALUES 							   
-    ('pbkdf2_sha256$390000$6NCUcyLFgwe6JDU2pA1mN7$44eqcoyN7nkpRnH0hD4nCAn0uZEdnqB8UmKbPko+Bgo=',null, False,'markus','Markus','Maeurer','markus.maeurer@fchampalimaud.org', True, True, CURRENT_TIMESTAMP), -- pw markuspw
-    ('pbkdf2_sha256$390000$5O94x1EvDTgWd1Rbnqsxsa$hxd5v0IV3FEmixTA//iI/O93A7FVeAxrgSHj3QgCrJY=',null, True,'ricardo.monteiro','Ricardo','Monteiro','ricardo.monteiro@research.fundacaochampalimaud.pt', True, True, CURRENT_TIMESTAMP); -- pw ricardopw
-           
+             
 
     INSERT INTO temperature (temperature_desc) VALUES 
     ('-80ºC'),
@@ -157,3 +158,5 @@ CREATE TABLE "analysis"(
     ('liver'),
     ('connective tissue'),
     ('skin');
+
+    COMMIT;
