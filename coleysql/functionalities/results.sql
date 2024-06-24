@@ -14,7 +14,7 @@ BEGIN
         SELECT * FROM cut WHERE sample_id = sampleid
     )
     SELECT json_agg(json_build_object(
-        'user', (SELECT username FROM auth_user WHERE auth_user.id = analysis.user_id,
+        'user', (SELECT username FROM auth_user WHERE auth_user.id = analysis.user_id),
         'result_path', analysis.result_xlsl_path,
         'cut_id', cuts.id,
         'sample_id', sample_id
