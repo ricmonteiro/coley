@@ -76,7 +76,7 @@ CREATE TABLE "analysis"(
 	
 
    INSERT INTO auth_user (password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined)  VALUES 							   
-    ('pbkdf2_sha256$390000$6NCUcyLFgwe6JDU2pA1mN7$44eqcoyN7nkpRnH0hD4nCAn0uZEdnqB8UmKbPko+Bgo=',null, False,'markus','Markus','Maeurer','markus.maeurer@fchampalimaud.org', True, True, CURRENT_TIMESTAMP), -- pw markuspw
+    ('pbkdf2_sha256$390000$6NCUcyLFgwe6JDU2pA1mN7$44eqcoyN7nkpRnH0hD4nCAn0uZEdnqB8UmKbPko+Bgo=',null, False,'markus','Markus','Maeurer','markus.maeurer@fchampalimaud.org', True, True, CURRENT_TIMESTAMP); -- pw markuspw
 
 
     INSERT INTO auth_user_groups (user_id, group_id) VALUES
