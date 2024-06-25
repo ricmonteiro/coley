@@ -30,7 +30,7 @@ $$ LANGUAGE plpgsql;
  * Create new cut
  */ 
 
-CREATE OR REPLACE PROCEDURE register_new_cut(sampleid INT, userid INT, prps VARCHAR, cutdate date)
+CREATE OR REPLACE PROCEDURE register_new_cut(sampleid INT, userid INT, prps VARCHAR, cutdate DATE)
 AS
 $$
 BEGIN
