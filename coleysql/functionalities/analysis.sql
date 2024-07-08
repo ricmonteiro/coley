@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE register_new_analysis(userid INT, cutid INT, submitdate TEXT, xlsxfile TEXT)
+CREATE OR REPLACE PROCEDURE register_new_analysis(userid INT, cutid INT, xlsxfile TEXT, submitdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
 AS
 $$
 BEGIN

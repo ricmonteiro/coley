@@ -172,10 +172,10 @@ function MainDashboard() {
                 <td>{file[0]}</td>
                 <td>{file[1]}</td>
                 <td>{file[2]}</td>
-                <td>{file[4]}</td>
+                <td>{file[3].substring(0,10)}</td>
                 <td>
-                <a href={file[3]} download>
-                  <Button variant="info" className='button m-2' key={file[3]} onClick={ () => handleDownloadFile(file[3]) }>
+                <a href={file[4]} download>
+                  <Button variant="info" className='button m-2' key={file[4]} onClick={ () => handleDownloadFile(file[4]) }>
                    
 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">

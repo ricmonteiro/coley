@@ -176,8 +176,8 @@ def create_cut(request):
         userid = int(json.loads(request.body.decode('utf-8'))['user'])
         purpose = str(json.loads(request.body.decode('utf-8'))['purpose'])
         date_creation = str(json.loads(request.body.decode('utf-8'))['date'])
-        sample = int(json.loads(request.body.decode('utf-8'))['sample'])
-        cursor.execute(REGISTER_NEW_CUT, (userid, purpose, sample, date_creation))
+        sampleid = int(json.loads(request.body.decode('utf-8'))['sample'])
+        cursor.execute(REGISTER_NEW_CUT, (sampleid, userid, purpose,  date_creation))
 
         return JsonResponse({'success': True, 'message': 'Cut created!'})
     else:
@@ -300,9 +300,7 @@ def file_upload(request):
             for chunk in uploaded_file.chunks():
                 file.write(chunk)
 
-        print(userid, cutid, submitdate, filename)
-
-        cursor.execute(REGISTER_NEW_ANALYSIS % (userid, cutid, "\'" + submitdate + "\'", "\'" + file_path + "\'"))
+        cursor.execute(REGISTER_NEW_ANALYSIS % (userid, cutid, "\'" + file_path + "\'", "\'" + submitdate + "\'"))
         print(request.FILES.get('file'))
         return JsonResponse({'success': True, 'message': 'Analysis result submitted!'})
 
