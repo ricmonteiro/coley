@@ -7,8 +7,8 @@ INSTRUCTIONS TO INSTALL AND RUN COLEY
     • Open a terminal window and go to the repo folder;
       
     • Run the commands:
-        ◦ Docker compose build;
-        ◦ Docker compose up -d;
+        ◦ docker compose build;
+        ◦ docker compose up -d;
           
     • Go to the database container in Docker Desktop. On the terminal, go to the home/coleydata folder. Run the commands:
         ◦ psql -U postgres;
